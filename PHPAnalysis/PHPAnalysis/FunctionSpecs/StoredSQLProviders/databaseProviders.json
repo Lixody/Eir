@@ -1,0 +1,94 @@
+{
+	"StoredVulnerabilityProviders":
+	[
+		{
+			"name":"mysqli_result->fetch_array",
+			"formats":[ "mysqli_result->fetch_array(int)", "mysqli_result->fetch_array()" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"resulttype", "type":"int", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"mysqli_result->fetch_assoc",
+			"formats": [ "mysqli_result->fetch_assoc()" ],
+			"totalParameters":0,
+			"parameters": [],
+			"returnType":"array"
+		},
+		{
+			"name":"SQLiteResult->fetch",
+			"formats": [ "SQLiteResult->fetch(int, bool)", "SQLiteResult->fetch(int)" ],
+			"aliases": [ "SQLiteUnbuffered->fetch" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"result_type", "type":"int", "optional":true },
+				{ "number":2, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"SQLiteResult->fetchObject",
+			"formats": [ "SQLiteResult->fetchObject(string, array, bool)", "SQLiteResult->fetchObject(string, array)", "SQLiteResult->fetchObject(string)" ],
+			"aliases": [ "SQLiteUnbuffered->fetchObject" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"class_name", "type":"string" },
+				{ "number":2, "name":"ctor_params", "type":"array", "optional":true },
+				{ "number":3, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"SQLiteResult->fetchSingle",
+			"formats": [ "SQLiteResult->fetchSingle(bool)", "SQLiteResult->fetchSingle()" ],
+			"aliases": [ "SQLiteUnbuffered->fetchSingle", "SQLiteResult::fetchString" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"string"
+		},
+		{
+			"name":"mysqli_result->fetch_all",
+			"formats": [ "mysqli_result->fetch_all(int)", "mysqli_result->fetch_all()" ],
+			"totalParameters":1,
+			"parameters":[
+				{ "number":1, "name":"result_type", "type":"int", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"mysqli_result->fetch_field",
+			"formats": [ "mysqli_result->fetch_field()" ],
+			"totalParameters":0,
+			"parameters": [],
+			"returnType":"object"
+		},
+		{
+			"name":"mysqli_result->fetch_fields",
+			"formats": [ "mysqli_result->fetch_fields()" ],
+			"totalParameters":0,
+			"parameters":[],
+			"returnType":"array"
+		},
+		{
+			"name":"mysqli_result->fetch_object",
+			"formats": [ "mysqli_result->fetch_object(string, array)", "mysqli_result->fetch_object(string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"class_name", "type":"string", "optional":true },
+				{ "number":2, "name":"stdClass", "type":"array", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"mysqli_result->fetch_row",
+			"formats": [ "mysqli_result->fetch_row()" ],
+			"totalParameters":0,
+			"parameters":[],
+			"returnType":"mix"
+		}
+	]
+}

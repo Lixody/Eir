@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{19467754-4DA7-4531-BB51-8CC024A0CCB3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PHPAnalysis.Tests</RootNamespace>
+    <AssemblyName>PHPAnalysis.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Serialization">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Data">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Graphviz">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.0.34\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Analysis\AST\IncludeResolvertTests.cs" />
+    <Compile Include="Analysis\CFG\CFGTraverserTests.cs" />
+    <Compile Include="Analysis\CFG\ExpressionInfoTests.cs" />
+    <Compile Include="Analysis\CFG\VariableResolverTests.cs" />
+    <Compile Include="Analysis\ClosureExtractionTests.cs" />
+    <Compile Include="Analysis\ReachDefTests.cs" />
+    <Compile Include="Analysis\StoredVulnTests.cs" />
+    <Compile Include="Analysis\Taint\TaintAnalysisTests.cs" />
+    <Compile Include="Analysis\TestWithNoGoodLocationYet.cs" />
+    <Compile Include="Parsing\CFGCreator_SkipElements_Tests.cs" />
+    <Compile Include="Parsing\CFGCreator_Continue_Tests.cs" />
+    <Compile Include="Parsing\CFGCreator_Case_Tests.cs" />
+    <Compile Include="Analysis\CFGPrunerTests.cs" />
+    <Compile Include="TestSettings.cs" />
+    <Compile Include="Parsing\CFGCreator_General_Tests.cs" />
+    <Compile Include="Parsing\CFGCreator_If_Tests.cs" />
+    <Compile Include="Parsing\CFGCreator_Break_Tests.cs" />
+    <Compile Include="Parsing\CFGCreator_Loop_Tests.cs" />
+    <Compile Include="Analysis\ClassExtractionTests.cs" />
+    <Compile Include="ConfigDependentTests.cs" />
+    <Compile Include="Analysis\FunctionExtractionTests.cs" />
+    <Compile Include="Data\AstConstantsTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtils\GraphAssertions.cs" />
+    <Compile Include="TestUtils\PHPParseUtils.cs" />
+    <Compile Include="TestUtils\TestFileUtils.cs" />
+    <Compile Include="TestUtils\TypeExtensions.cs" />
+    <Compile Include="Parsing\CFGCreator_FunctionCreation_tests.cs" />
+    <Compile Include="Parsing\CFGCreator_ClassTests.cs" />
+    <Compile Include="Analysis\FunctionCallExtractionTests.cs" />
+    <Compile Include="Utils\XmlHelpers\ScalarNodeTests.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\PHPAnalysis\PHPAnalysis.csproj">
+      <Project>{04511BB1-4881-44F2-B07D-FD88CEDE53CB}</Project>
+      <Name>PHPAnalysis</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+</Project>

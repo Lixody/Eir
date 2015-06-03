@@ -1,0 +1,158 @@
+﻿{
+	"XSSSanitizersFuncs":[
+		{
+			"name":"esc_html",
+			"formats": [ "esc_html(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"text", "type":"object", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"esc_html__",
+			"formats": [ "esc_html__(string, string)" ],
+			"totalParameters": 2,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string", "isReturnValue":true },
+				{ "number":2, "name":"string", "type":"string" }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"ext_textarea",
+			"formats": [ "esc_textarea(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"sanitize_text_field",
+			"formats": [ "sanitize_text_field(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"str", "type":"string", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+
+	    {
+			"name":"esc_attr",
+			"formats": [ "esc_attr(text)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"text", "type":"string", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"esc_attr__",
+			"formats": [ "esc_attr__(string, string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string", "isReturnValue":true },
+				{ "number":2, "name":"domain", "type":"string" }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+
+	    {
+			"name":"esc_js",
+			"formats": [ "esc_js(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"text", "type":"string", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+
+	    {
+			"name":"esc_url",
+			"formats": [ "esc_url(string, array, string)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"object", "isReturnValue":true },
+				{ "number":2, "name":"protocols", "type":"array", "optional":true },
+				{ "number":3, "name":"context", "type":"string", "optional":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"esc_url_raw",
+			"formats": [ "esc_url_raw(string, array)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"object", "isReturnValue":true },
+				{ "number":2, "name":"flags", "type":"flag", "optional":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"urlencode",
+			"formats": [ "urlencode(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"object", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"sanitize_html_class",
+			"formats": [ "sanitize_html_class(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"wp_kses",
+			"formats": [ "wp_kses(string, array, array)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string", "isReturnValue":true },
+				{ "number":2, "name":"string", "type":"string" },
+				{ "number":3, "name":"string", "type":"string", "isoptional":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"checked",
+			"formats": [ "checked(string, bool, bool)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string" },
+				{ "number":2, "name":"string", "type":"bool", "isoptional":true },
+				{ "number":3, "name":"string", "type":"bool", "isoptional":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
+	    {
+			"name":"selected",
+			"formats": [ "selected(string, bool, bool)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"string", "type":"string" },
+				{ "number":2, "name":"string", "type":"bool", "isoptional":true },
+				{ "number":3, "name":"string", "type":"bool", "isoptional":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		}
+	]
+}

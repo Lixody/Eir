@@ -1,0 +1,88 @@
+{
+	"ConditionSanitizerFuncs":
+	[
+		{
+			"name":"is_bool",
+			"formats": [ "is_bool(bool)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"bool", "type":"object" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"is_int",
+			"formats": [ "is_int(int)" ],
+	        "aliases": [ "is_integer", "is_long" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"int", "type":"object" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"is_float",
+			"formats": [ "is_float(float)" ],
+	        "aliases": [ "is_double", "is_real" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"float", "type":"object" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"is_numeric",
+			"formats": [ "is_numeric(number)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"number", "type":"object" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"is_float",
+			"formats": [ "is_null(object)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"object", "type":"object" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"ctype_alnum",
+			"formats": [ "ctype_alnum(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"text", "type":"string" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"ctype_digit",
+			"formats":[ "ctype_digit(string)" ],
+			"aliases": [ "ctype_xdigit" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"object", "type":"string" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		},
+		{
+			"name":"ctype_space",
+			"formats": [ "ctype_space(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"text", "type":"string" }
+			],
+			"returnType":"bool",
+			"defaultStatus":"XSSSQL_SAFE"
+		}
+	]
+}

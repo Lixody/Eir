@@ -1,0 +1,790 @@
+{
+		"SqlSinksFuncs":[
+		{
+			"name":"dba_open",
+			"formats": [ "dba_open(string, string)", "dba_open(string, string string)", "dba_open(string, string, string, mix)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "type":"string", "name":"path" },
+				{ "number":2, "type":"string", "name":"mode" },
+				{ "number":3, "name":"handler", "type":"string", "optional":true },
+				{ "number":4, "name":"...", "type":"mix", "optional":true, "IsVariadic":true, "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"dba_popen",
+			"formats": [ "dba_popen(string, string, string, mix)", "dba_popen(string, string, string)", "dba_popen(string, string)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"path", "type":"string" },
+				{ "number":2, "name":"mode", "type":"string" },
+				{ "number":3, "name":"handler", "type":"string", "optional":true },
+				{ "number":4, "name":"...", "type":"mix", "optional":true, "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"dba_insert",
+			"formats": [ "dba_insert(string, string, object)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"key", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"value", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"handle", "type":"object" }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"dba_fetch",
+			"formats": [ "dba_fetch(string, object)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"key", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"handle", "type":"object" }
+			],
+			"returnType":"string"
+		},
+		{
+			"name":"dba_fetch",
+			"formats": [ "dba_fetch(string, int, object)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"key", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"skip", "type":"int" },
+				{ "number":3, "name":"handle", "type":"object" }
+			],
+			"returnType":"string"
+		},
+		{
+			"name":"dba_delete",
+			"formats": [ "dba_delete(string, object)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"key", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"handle", "type":"object" }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"dbx_query",
+			"formats": [ "dbx_query(object, string)", "dbx_query(object, string, int)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"link_identifier", "type":"object" },
+				{ "number":2, "name":"sql_statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"flags", "type":"int", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"odbc_exec",
+			"formats": [ "odbc_exec(object, string)", "odbc_exec(object, string, int)" ],
+			"aliases": [ "odbc_do" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"connection_id", "type":"object" },
+				{ "number":2, "name":"query_string", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"flags", "type":"int", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"_comment":"The query is actually prepared in odbc_prepare!!!!",
+			"name":"odbc_execute",
+			"formats": [ "odbc_execute(object, array)", "odbc_execute(object)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"result_id", "type":"object" },
+				{ "number":2, "name":"parameters_array", "type":"array", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"odbc_prepare",
+			"formats": [ "odbc_prepare(object, string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"connection_id", "type":"object" },
+				{ "number":2, "name":"query_string", "type":"string" }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"db2_exec",
+			"formats": [ "db2_exec(object, string)", "db2_exec(object, string, array)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"connection", "type":"object" },
+				{ "number":2, "name":"statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"options", "type":"array", "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"_comment":"again the actual query is in db2_prepare, and the values are here. What do we do ???",
+			"name":"db2_execute",
+			"formats": [ "db2_execute(object)", "db2_execute(object, array)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"stmt", "type":"object", "can_be_vulnerable":true },
+				{ "number":2, "name":"parameters", "type":"array", "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"db2_prepare",
+			"formats": [ "db2_prepare(object, string)", "db2_prepare(object, string, array)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"connection", "type":"object" },
+				{ "number":2, "name":"statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"options", "type":"array", "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"fbsql_db_query",
+			"formats":[ "fbsql_db_query(string, string)", "fbsql_db_query(string, string, object)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"database", "type":"string" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"fbsql_query",
+			"formats": [ "fbsql_query(string)", "fbsql_query(string, object)", "fbsql_query(string, object, int)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":true },
+				{ "number":3, "name":"batch_size", "type":"int", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ibase_query",
+			"formats": [ "ibase_query(object, string, int)", "ibase_query(object, string)", "ibase_query(string)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"link_identifier", "type":"object", "optional":true },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"bind_args", "type":"int", "optional":true, "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"_comment":"same problem as before, prepared statements!",
+			"name":"ibase_execute",
+			"formats": [ "ibase_execute(object)", "ibase_execute(object, mix)", "ibase_execute(object, mix, mix)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"object", "can_be_vulnerable":true },
+				{ "number":2, "name":"bind_arg", "type":"mix", "optional":true, "can_be_vulnerable":true },
+				{ "number":3, "name":"...", "type":"mix", "IsVariadic":true, "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ibase_prepare",
+			"formats": [ "ibase_prepare(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ibase_prepare",
+			"formats": [ "ibase_prepare(object, string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"link_identifier", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ibase_prepare",
+			"formats": [ "ibase_prepare(object, string, string)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"link_identifier", "type":"object" },
+				{ "number":2, "name":"trans", "type":"string" },
+				{ "number":3, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ifx_query",
+			"formats": [ "ifx_query(string, object, int, mix)", "ifx_query(string, object, int)", "ifx_query(string, object)" ],
+			"aliases": [ "ifx_prepare" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object" },
+				{ "number":3, "name":"cursor_type", "type":"int", "optional":true },
+				{ "number":4, "name":"blobidarray", "type":"mix", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ifx_do",
+			"formats": [ "ifx_do(object)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"result_id", "type":"object", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"ingres_query",
+			"formats": [ "ingres_query(object, string, array, string)", "ingres_query(object, string, array)", "ingres_query(object, string)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"link", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"params", "type":"array", "optional":true, "can_be_vulnerable":true },
+				{ "number":4, "name":"types", "type":"string", "optional":true, "can_be_vulnerable":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"ingres_execute",
+			"formats": [ "ingres_execute(object, array, string)", "ingres_execute(object, array)", "ingres_execute(object)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"result", "type":"object", "can_be_vulnerable":true },
+				{ "number":2, "name":"params", "type":"array", "can_be_vulnerable":true, "optional":true },
+				{ "number":3, "name":"types", "type":"string", "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"_comment":"again this is the prepare statement",
+			"name":"ingres_prepare",
+			"formats": [ "ingres_prepare(object, string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"link", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"ingres_unbuffered_query",
+			"formats": [ "ingres_unbuffered_query(object, string, array, string)", "ingres_unbuffered_query(object, string, array)", "ingres_unbuffered_query(object, string)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"object", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }, 
+				{ "number":3, "name":"params", "type":"array", "can_be_vulnerable":true, "optional":true },
+				{ "number":4, "name":"types", "type":"string", "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"msql_db_query",
+			"formats": [ "msql_db_query(string, string, object)", "msql_db_query(string, string)" ],
+			"aliases": [ "msql" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"database", "type":"string" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"msql_query",
+			"formats": [ "msql_query(string, object)", "msql_query(string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"mssql_query",
+			"formats": [ "mssql_query(string, object, int)", "mssql_query(string, object)", "mssql_query(string)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":true },
+				{ "number":3, "name":"batch_size", "type":"int", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"_comment":"mssql_init is prepare statement",
+			"name":"mssql_execute",
+			"formats": [ "mssql_execute(object, bool)", "mssql_execute(object)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"stmt", "type":"object", "can_be_vulnerable":true },
+				{ "number":2, "name":"skip_results", "type":"bool", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"mssql_init",
+			"formats": [ "mssql_init(string, object)", "mssql_init(string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"sp_name", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"mysql_db_query",
+			"formats": [ "mysql_db_query(string, string, object)", "mysql_db_query(string, string)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"database", "type":"string" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"mysql_query",
+			"formats": [ "mysql_query(string, object)", "mysql_query(string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"mysql_unbuffered_query", 
+			"formats": [ "mysql_unbuffered_query(string, object)", "mysql_unbuffered_query(string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true }, 
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"mysqli_stmt_execute",
+			"formats": [ "mysqli_stmt_execute(object)" ],
+			"totalParameters":1,
+			"parameters":[
+				{ "number":1, "name":"stmt", "type":"object", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"mysqli->execute",
+			"formats": [ "mysqli->execute()" ],
+			"totalParameters":0,
+			"parameters":[],
+			"returnType":"bool"
+		},
+		{
+			"_comment":"prepare statement for mysqli execute",
+			"name":"mysqli->prepare",
+			"formats": [ "mysqli->prepare(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object",
+			"classnames": [ "mysqli_stmt" ]
+		},
+		{
+			"name":"mysqli_prepare",
+			"formats": [ "mysqli_prepare(object, string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"link_identifier", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"mysqli->query",
+			"formats": [ "mysqli->query(string, int)", "mysqli->query(string)" ],
+			"aliases": [ "mysqli->real_query" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"resultmode", "type":"int", "optional":true }
+			],
+			"returnType":"mix",
+			"classnames": [ "mysqli_result" ]
+		},
+		{
+			"name":"mysqli_query",
+			"formats": [ "mysqli_query(object, string, int)", "mysqli_query(object, string)" ],
+			"aliases": [ "mysqli_real_query" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"link", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"resultmode", "type":"int", "optional":true }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"mysqli_master_query", 
+			"formats": [ "mysqli_master_query(object, string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"link", "type":"object" }, 
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"oci_execute",
+			"formats":[ "oci_execute(object, int)", "oci_execute(object)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"statement", "type":"object", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"_comment":"prepare statement",
+			"name":"oci_parse",
+			"formats": [ "oci_parse(object, string)" ],
+			"aliases": [ "ociexecute" ],
+			"totalParameters":2, 
+			"parameters": [
+				{ "number":1, "name":"connection", "type":"object" },
+				{ "number":2, "name":"sql_text", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"ovrimos_exec",
+			"formats": [ "ovrimos_exec(int, string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"connection_id", "type":"int" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"int"
+		},
+		{
+			"name":"ovrimos_execute",
+			"formats": [ "ovrimos_execute(int, array)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"result_id", "type":"int", "can_be_vulnerable":true },
+				{ "number":2, "name":"parameter_array", "type":"array", "can_be_vulnerable":true, "optional":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"_comment":"prepare statement",	
+			"name":"ovrimos_prepare",
+			"formats":[ "ovrimos_prepare(int, string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"connection_id", "type":"int", "can_be_vulnerable":true }, 
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"int"
+		},
+		{
+			"name":"pg_query",
+			"formats": [ "pg_query(object, string)", "pg_query(string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"connection", "type":"object", "optional":true },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"pg_send_query",
+			"formats": [ "pg_send_query(object, string)" ], 
+			"totalParameters":2, 
+			"parameters": [
+				{ "number":1, "name":"connection", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"pg_send_query_params",
+			"formats":[ "pg_send_query_params(object, string, array)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"connection", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"params", "type":"array", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"pg_send_prepare",
+			"formats": [ "pg_send_prepare(object, string, string)" ],
+			"aliases": [ "pg_prepare" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"connection", "type":"object" },
+				{ "number":2, "name":"+stmtname", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"sqlite_array_query",
+			"formats": [ "sqlite_array_query(object, string, int, bool)", "sqlite_array_query(object, string, int)", "sqlite_array_query(object, string)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"dbhandle", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"result_type", "type":"int", "optional":true },
+				{ "number":4, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"sqlite_array_query",
+			"formats": [ "sqlite_array_query(string, object, int, bool)", "sqlite_array_query(string, object, int)", "sqlite_array_query(string, object)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"dbhandle", "type":"object" },
+				{ "number":3, "name":"result_type", "type":"int", "optional":true },
+				{ "number":4, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"	
+		},
+		{
+			"name":"SQLiteDatabase->arrayQuery",
+			"formats":[ "SQLiteDatabase->arrayQuery(string, int, bool)", "SQLiteDatabase->arrayQuery(string, int)", "SQLiteDatabase->arrayQuery(string)" ],
+			"totalParameters":3, 
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true }, 
+				{ "number":2, "name":"result_type", "type":"int", "optional":true },
+				{ "number":3, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"sqlite_single_query",
+			"formats": [ "sqlite_single_query(object, string, bool, bool)", "sqlite_single_query(object, string, bool)", "sqlite_single_query(object, string)" ],
+			"totalParameters":4,
+			"parameters":[
+				{ "number":1, "name":"db", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"first_row_only", "type":"bool", "optional":true },
+				{ "number":4, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"SQLiteDatabase->singleQuery",
+			"formats": [ "SQLiteDatabase->singleQuery(string, bool, bool)", "SQLiteDatabase->singleQuery(string, bool)", "SQLiteDatabase->singleQuery(string)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"first_row_only", "type":"bool", "optional":true },
+				{ "number":3, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"sqlite_query",
+			"formats": [ "sqlite_query(object, string, int, string)", "sqlite_query(object, string, int)", "sqlite_query(object, string)" ],
+			"totalParameters":4,
+			"aliases": [ "sqlite_unbuffered_query" ],
+			"parameters":[
+				{ "number":1, "name":"dbhandle", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"result_type", "type":"int", "optional":true },
+				{ "number":4, "name":"error_msg", "type":"string", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"sqlite_query",
+			"formats":[ "sqlite_query(string, object, int, string)", "sqlite_query(string, object, int)", "sqlite_query(string, object)" ],
+			"aliases":[ "sqlite_unbuffered_query" ],
+			"totalParameters":4,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"dbhandle", "type":"object" },
+				{ "number":3, "name":"result_type", "type":"int", "optional":true },
+				{ "number":4, "name":"error_msg", "type":"string", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"SQLiteDatabase->query",
+			"formats":[ "SQLiteDatabase->query(string, int, string)", "SQLiteDatabase->query(string, int)", "SQLiteDatabase->query(string)" ],
+			"totalParameters":3,
+			"aliases": [ "SQLiteDatabase->unbufferedQuery" ],
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"result_type", "type":"int", "optional":true },
+				{ "number":3, "name":"error_msg", "type":"string", "optional":true }
+			],
+			"returnType":"object",
+			"classname": [ "SQLiteResult", "SQLiteUnbuffered" ]
+		},
+		{
+			"name":"sqlite_exec",
+			"formats": [ "sqlite_exec(object, string, string)", "sqlite_exec(object, string)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"dbhandle", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"string", "type":"string", "optional":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"sqlite_exec",
+			"formats":[ "sqlite_exec(string, object)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"dbhandle", "type":"object" }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"SQLiteDatabase->queryExec",
+			"formats": [ "SQLiteDatabase->queryExec(string, string)", "SQLiteDatabase->queryExec(string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"error_msg", "type":"string", "optional":true }
+			],
+			"returnType":"bool"
+		},
+		{
+			"name":"sqlite_single_query",
+			"formats":[ "sqlite_single_query(object, string, bool, bool)", "sqlite_single_query(object, string, bool)", "sqlite_single_query(object, string)" ],
+			"totalParameters":4,
+			"parameters":[
+				{ "number":1, "name":"db", "type":"object" },
+				{ "number":2, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":3, "name":"first_row_only", "type":"bool", "optional":true },
+				{ "number":4, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"SQLiteDatabase->singleQuery",
+			"formats":[ "SQLiteDatabase->singleQuery(string, bool, bool)", "SQLiteDatabase->singleQuery(string, bool)", "SQLiteDatabase->singleQuery(string)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"first_row_only", "type":"bool", "optional":true },
+				{ "number":3, "name":"decode_binary", "type":"bool", "optional":true }
+			],
+			"returnType":"array"
+		},
+		{
+			"name":"sybase_query",
+			"formats":[ "sybase_query(string, object)", "sybase_query(string)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object", "optional":"true" }
+			],
+			"returnType":"mix"
+		},
+		{
+			"name":"sybase_unbuffered_query",
+			"formats": [ "sybase_unbuffered_query(string, object, bool)", "sybase_unbuffered_query(string, object)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"link_identifier", "type":"object" },
+				{ "number":3, "name":"store_result", "type":"bool", "optional":true }
+			],
+			"returnType":"object"
+		},
+		{
+			"name":"PDO->exec",
+			"formats": [ "PDO->exec(string)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"statement", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"int"
+		},
+		{
+			"name":"PDO->query",
+			"formats": [ "PDO->query(string)" ],
+			"totalParameters":1,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"object",
+			"classnames": [ "PDOStatement" ]
+		},
+		{
+			"name":"PDO->query",
+			"formats": [ "PDO->query(string, int, int)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"PDO->fetch", "type":"int" },
+				{ "number":3, "name":"colno", "type":"int" }
+			],
+			"returnType":"object",
+			"classnames": [ "PDOStatement" ]
+		},
+		{
+			"name":"PDO->query",
+			"formats": [ "PDO->query(string, int, string, array)" ],
+			"totalParameters":4,
+			"parameters": [
+				{ "number":1, "name":"statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"PDO->FETCH_CLASS", "type":"int" },
+				{ "number":3, "name":"classname", "type":"string" },
+				{ "number":4, "name":"ctorargs", "type":"array" }
+			],
+			"returnType":"object",
+			"classnames": [ "PDOStatement" ]
+		},
+		{
+			"name":"PDO->query",
+			"formats": [ "PDO->query(string, int, object)" ],
+			"totalParameters":3,
+			"parameters": [
+				{ "number":1, "name":"statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"PDO->FETCH_CLASS", "type":"int" },
+				{ "number":3, "name":"object", "type":"object" }
+			],
+			"returnType":"object",
+			"classnames": [ "PDOStatement" ]
+		},
+		{
+			"_comment":"prepare statement",
+			"name":"PDO->prepare",
+			"formats": [ "PDO->prepare(string, array)", "PDO->prepare(string)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "name":"statement", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"driver_options", "type":"array", "optional":true }
+			],
+			"returnType":"object",
+			"classnames": [ "PDOStatement" ]
+		},
+		{
+			"name":"PDO->execute",
+			"formats":[ "PDO->execute(array)" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"input_parameters", "type":"array", "can_be_vulnerable":true }
+			],
+			"returnType":"bool"
+		}
+	]
+}

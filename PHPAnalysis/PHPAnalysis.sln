@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHPAnalysis", "PHPAnalysis\PHPAnalysis.csproj", "{04511BB1-4881-44F2-B07D-FD88CEDE53CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHPAnalysis.Tests", "PHPAnalysis.Tests\PHPAnalysis.Tests.csproj", "{19467754-4DA7-4531-BB51-8CC024A0CCB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPress.Plugin", "WordPress.Plugin\WordPress.Plugin.csproj", "{B27C2212-E33B-4BEF-9FB7-62113A3682C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B98AE9F-4B39-426F-B5D5-DF549FDE4327}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileWriter.Plugin", "FileWriter.Plugin\FileWriter.Plugin.csproj", "{6EBE6355-A353-4614-A507-EB251282541B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04511BB1-4881-44F2-B07D-FD88CEDE53CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04511BB1-4881-44F2-B07D-FD88CEDE53CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04511BB1-4881-44F2-B07D-FD88CEDE53CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04511BB1-4881-44F2-B07D-FD88CEDE53CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19467754-4DA7-4531-BB51-8CC024A0CCB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19467754-4DA7-4531-BB51-8CC024A0CCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19467754-4DA7-4531-BB51-8CC024A0CCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19467754-4DA7-4531-BB51-8CC024A0CCB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B27C2212-E33B-4BEF-9FB7-62113A3682C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B27C2212-E33B-4BEF-9FB7-62113A3682C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B27C2212-E33B-4BEF-9FB7-62113A3682C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B27C2212-E33B-4BEF-9FB7-62113A3682C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EBE6355-A353-4614-A507-EB251282541B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EBE6355-A353-4614-A507-EB251282541B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EBE6355-A353-4614-A507-EB251282541B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EBE6355-A353-4614-A507-EB251282541B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

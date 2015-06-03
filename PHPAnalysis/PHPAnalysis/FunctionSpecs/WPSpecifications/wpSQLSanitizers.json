@@ -1,0 +1,49 @@
+{
+    "SQLSanitizersFuncs":[
+        {
+            "name":"esc_sql",
+            "formats":[ "esc_sql(string)" ],
+            "totalParameters": 1,
+            "parameters": [
+                { "number":1, "name":"sql", "type":"string", "isReturnValue":true }
+            ],
+            "returnType":"string",
+            "defaultStatus": "None"
+        },
+        {
+            "name":"wpdb->prepare",
+            "formats":[ "wpdb->prepare(string, array)" ],
+            "totalParameters": 2,
+            "parameters": [
+                { "number":1, "name":"query", "type":"string", "isReturnValue":true },
+                { "number":2, "name":"value_parameter", "type":"array", "IsVariadic": true,  "isReturnValue":false }
+            ],
+            "returnType":"string",
+            "defaultStatus": "SQL_ALL"
+        },
+        {
+            "name":"checked",
+            "formats": [ "checked(string, bool, bool)" ],
+            "totalParameters":3,
+            "parameters": [
+                { "number":1, "name":"string", "type":"string" },
+                { "number":2, "name":"string", "type":"bool", "isoptional":true },
+                { "number":3, "name":"string", "type":"bool", "isoptional":true }
+            ],
+            "returnType":"string",
+            "defaultStatus":"None"
+        },
+        {
+            "name":"selected",
+            "formats": [ "checked(string, bool, bool)" ],
+            "totalParameters":3,
+            "parameters": [
+                { "number":1, "name":"string", "type":"string" },
+                { "number":2, "name":"string", "type":"bool", "isoptional":true },
+                { "number":3, "name":"string", "type":"bool", "isoptional":true }
+            ],
+            "returnType":"string",
+            "defaultStatus":"None"
+        }
+    ]
+}

@@ -1,0 +1,83 @@
+{
+	"XssSinkFuncs":[
+		{
+			"name":"print",
+			"formats":[ "print(string)", "printf string" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "type":"string", "name":"arg" },
+			],
+			"defaultOutput":true,
+			"returnType":"int",
+			"defaultStatus":"XSS_ALL"
+		},
+		{
+			"name":"printf",
+			"formats":[ "printf(string, mix)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "type":"string", "name":"format" },
+				{ "number":2, "type":"mix", "name":"...", "IsVariadic":true}
+			],
+			"defaultOutput":true,
+			"returnType":"int",
+			"defaultStatus":"XSS_ALL"
+		},
+		{
+			"name":"vprintf",
+			"formats":[ "vsprintf(string, mix)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "type":"string", "name":"format" },
+				{ "number":2, "type":"mix", "name":"arg", "IsVariadic":false}
+			],
+			"defaultOutput":true,
+			"returnType":"string",
+			"defaultStatus":"XSS_ALL"
+		},
+	    {
+	        "name":"print_r",
+	        "formats":[ "print_r(mix, bool)", "print_r(mix)" ],
+	        "totalParameters":2,
+	        "parameters": [
+	            { "number":1, "type":"mix", "name":"expression" },
+	            { "number":2, "type":"bool", "name":"return", "optional":true, "values": [
+						{"value":true, "outputs":false },
+						{"value":false, "outputs":true }
+					]
+				}
+	        ],
+	        "defaultOutput":true,
+	        "returnType":"string",
+	        "defaultStatus":"XSS_ALL"
+	    },
+		{
+			"name":"die",
+			"formats":[ "die(string)", "die(int)" ],
+			"aliases": [ "exit" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "type":"mix", "name":"status" }
+			],
+			"defaultOutput":true,
+			"returnType":"void",
+			"defaultStatus":"XSS_ALL"
+		},
+		{
+			"name":"var_export",
+			"formats":[ "var_export(mix)" ],
+			"totalParameters":2,
+			"parameters": [
+				{ "number":1, "type":"mix", "name":"expression" },
+				{ "number":2, "type":"bool", "name":"return", "values": [
+						{"value":true, "outputs":false },
+						{"value":false, "outputs":true }
+					]
+				}
+			],
+			"defaultOutput":true,
+			"returnType":"mix",
+			"defaultStatus":"XSS_ALL"
+		},
+	]
+}

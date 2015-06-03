@@ -1,0 +1,100 @@
+﻿{
+		"SqlSinksFuncs":[
+		{
+			"name":"wpdb->get_results",
+			"formats": [ "wpdb->get_results(string, int)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+                { "number":2, "name":"output_type", "type":"int", "can_be_vulnerable":false }
+			],
+			"returnType":"array"
+		},
+        {
+			"name":"wpdb->query",
+			"formats": [ "wpdb->query(string)" ],
+			"totalParameters":1,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true }
+			],
+			"returnType":"array"
+		},
+        {
+			"name":"wpdb->get_col",
+			"formats": [ "wpdb->get_col(string, int)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+                { "number":2, "name":"column_offset", "type":"int", "can_be_vulnerable":false }
+			],
+			"returnType":"array"
+		},
+        {
+			"name":"wpdb->get_row",
+			"formats": [ "wpdb->get_row(string, int)" ],
+			"totalParameters":2,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+                { "number":2, "name":"column_offset", "type":"int", "can_be_vulnerable":false }
+			],
+			"returnType":"array"
+		},
+        {
+			"name":"wpdb->get_var",
+			"formats": [ "wpdb->get_var(string, int, int)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"query", "type":"string", "can_be_vulnerable":true },
+                { "number":2, "name":"column_offset", "type":"int", "can_be_vulnerable":false },
+                { "number":3, "name":"row_offset", "type":"int", "can_be_vulnerable":false }
+			],
+			"returnType":"array"
+		},
+        {
+			"name":"wpdb->insert",
+			"formats": [ "wpdb->insert(string, array, string)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"table", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"data", "type":"array" },
+				{ "number":3, "name":"format", "type":"array" }
+			],
+			"returnType":"int, bool"
+		},
+        {
+			"name":"wpdb->update",
+			"formats": [ "wpdb->update(string, array, string)" ],
+			"totalParameters":5,
+			"parameters":[
+				{ "number":1, "name":"table", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"data", "type":"array" },
+				{ "number":3, "name":"where", "type":"array" },
+				{ "number":4, "name":"format", "type":"array", "is_optional":true },
+				{ "number":5, "name":"where_format", "type":"array", "is_optional":true}
+			],
+			"returnType":"int, bool"
+		},
+        {
+			"name":"wpdb->replace",
+			"formats": [ "wpdb->replace(string, array, string)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"table", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"data", "type":"array" },
+				{ "number":3, "name":"format", "type":"array" }
+			],
+			"returnType":"int, bool"
+		},
+        {
+			"name":"wpdb->delete",
+			"formats": [ "wpdb->delete(string, array, string)" ],
+			"totalParameters":3,
+			"parameters":[
+				{ "number":1, "name":"table", "type":"string", "can_be_vulnerable":true },
+				{ "number":2, "name":"where", "type":"array" },
+				{ "number":3, "name":"where_format", "type":"array" }
+			],
+			"returnType":"int, bool"
+		}
+	]
+}

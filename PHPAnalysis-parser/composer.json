@@ -1,0 +1,21 @@
+{
+  "name": "MAV/PHPAnalyzer",
+  "description": "description_text",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "MAV",
+      "email": "mvej10@student.aau.dk"
+    }
+  ],
+  "require": {
+    "symfony/console": "~3.0@dev",
+    "symfony/finder": "~3.0@dev",
+    "nikic/php-parser": "~1.1@dev",
+    "symfony/config": "~3.0@dev"
+  },
+  "autoload": {
+    "classmap": ["src/"]
+  }
+}

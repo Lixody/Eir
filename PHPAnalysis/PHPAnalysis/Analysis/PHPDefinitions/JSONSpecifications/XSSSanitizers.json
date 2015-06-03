@@ -1,0 +1,361 @@
+[
+	{
+		"name":"htmlentities",
+		"formats": [ "htmlentities(string, int, string, bool)" ],
+		"totalParameters":4,
+		"parameters": [
+			{ "number":1, "name":"string", "type":"object", "isReturnValue":true },
+			{ "number":2, "name":"flags", "type":"flag", "values": [
+					{"value":2, "outputStatus":"XSS_HTML" },
+					{"value":3, "outputStatus":"None" },
+					{"value":0, "outputStatus":"XSS_HTML" },
+					{"value":4, "outputStatus":"XSS_HTML" },
+					{"value":8, "outputStatus":"XSS_HTML" },
+					{"value":128, "outputStatus":"XSS_HTML" }
+				]
+			},
+			{ "number":3, "name":"encoding", "type":"string" },
+			{ "number":4, "name":"double_encode", "type":"bool" }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"htmlspecialchars",
+		"formats": [ "htmlspecialchars(string, int, string, bool)" ],
+		"totalParameters":4,
+		"parameters": [
+			{ "number":1, "name":"string", "type":"object", "isReturnValue":true },
+			{ "number":2, "name":"flags", "type":"flag", "values": [
+					{"value":2, "outputStatus":"XSS_HTML" },
+					{"value":3, "outputStatus":"None" },
+					{"value":0, "outputStatus":"XSS_HTML" },
+					{"value":4, "outputStatus":"XSS_HTML" },
+					{"value":8, "outputStatus":"XSS_HTML" },
+					{"value":128, "outputStatus":"XSS_HTML" }
+				]
+			},
+			{ "number":3, "name":"encoding", "type":"string" },
+			{ "number":4, "name":"double_encode", "type":"bool" }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"intval",
+		"formats": [ "intval(mix, int)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"var", "type":"mix", "isReturnValue":true },
+			{ "number":2, "name":"base", "type":"int", "optional":true }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"floatval",
+		"formats": [ "floatval(mix) " ],
+		"aliases": [ "doubleval" ],
+		"totalParameters":1,
+		"parameters": [ 
+			{ "number":1, "name":"var", "type":"mix", "isReturnValue":true }
+		],
+		"returnType":"float",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"filter_input",
+		"formats": [ "filter_input(int, string)", "filter_input(int, string, int)", "filter_input(int, string, int, mix)" ],
+		"totalParameters":4,
+		"parameters": [
+			{ "number":1, "name":"type", "type":"int" },
+			{ "number":2, "name":"variable_name", "type":"string", "isReturnValue":true },
+			{ "number":3, "name":"filter", "type":"int", "optional":true },
+			{ "number":4, "name":"options", "type":"mix", "optional":true }
+		],
+		"returnType":"mix",
+		"defaultStatus":"XSS_ALL"
+	},
+	{
+		"name":"round",
+		"formats": [ "round(float)", "round(float, int)", "round(float, int, int)" ],
+		"totalParameters":3,
+		"parameters": [
+			{ "number":1, "name":"val", "type":"float", "isReturnValue":true },
+			{ "number":2, "name":"precision", "type":"int", "optional":true },
+			{ "number":3, "name":"mode", "type":"int", "optional":true }
+		],
+		"returnType":"float",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"floor",
+		"formats": [ "floor(float)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"val", "type":"float", "isReturnValue":true }
+		],
+		"returnType":"float",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"strlen",
+		"formats": [ "strlen(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"string", "type":"string" }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"strrpos",
+		"formats": [ "strrpos(string, string)", "strrpos(string, string, int)" ],
+		"totalParameters":3,
+		"parameters": [
+			{ "number":1, "name":"haystack", "type":"string" },
+			{ "number":2, "name":"needle", "type":"string" },
+			{ "number":3, "name":"offset", "type":"int", "optional":true }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"strpos",
+		"formats": [ "strpos(string, mix)", "strpos(string, mix, int)" ],
+		"totalParameters":3,
+		"parameters": [
+			{ "number":1, "name":"haystack", "type":"string" },
+			{ "number":2, "name":"needle", "type":"mix" },
+			{ "number":3, "name":"offset", "type":"int", "optional":true }
+		],
+		"returnType":"mix",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"md5",
+		"formats": [ "md5(string)", "md5(string, bool)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"str", "type":"string", "isReturnValue":true },
+			{ "number":2, "name":"raw_output", "type":"bool", "optional":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"sha1",
+		"formats":[ "sha1(string)", "sha1(string, bool)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"str", "type":"string", "isReturnValue":true },
+			{ "number":2, "name":"raw_output", "type":"bool", "optional":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"crypt",
+		"formats":[ "crypt(string)", "crypt(string, string)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"str", "type":"string", "isReturnValue":true },
+			{ "number":2, "name":"salt", "type":"string", "optional":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"crc32",
+		"formats": [ "crc32(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"str", "type":"string", "isReturnValue":true }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"hash",
+		"formats":[ "hash(string, string)", "hash(string, string, bool)" ],
+		"totalParameters":3,
+		"parameters": [
+			{ "number":1, "name":"algo", "type":"string" },
+			{ "number":2, "name": "data", "type":"string", "isReturnValue":true },
+			{ "number":3, "name":"raw_output", "type":"bool", "optional":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"base64_encode",
+		"formats": [ "base64_encode(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"data", "type":"string", "isReturnValue":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"ord",
+		"formats":[ "ord(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"string", "type":"string" }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"count",
+		"formats": [ "count(mix)", "count(mix, int)" ],
+		"aliases": [ "sizeof" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"array_or_countable", "type":"mix" },
+			{ "number":2, "name":"mode", "type":"int", "optional":true }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"bin2hex",
+		"formats": [ "bin2hex(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"str", "type":"string", "isReturnValue":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"levenshtein",
+		"formats": [ "levenshtein(string, string)", "levenshtein(string, string, int, int, int)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"str1", "type":"string" },
+			{ "number":2, "name":"str2", "type":"string" },
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"levenshtein",
+		"formats": [ "levenshtein(string, string)", "levenshtein(string, string, int, int, int)" ],
+		"totalParameters":5,
+		"parameters": [
+			{ "number":1, "name":"str1", "type":"string" },
+			{ "number":2, "name":"str2", "type":"string" },
+			{ "number":3, "name":"cost_int", "type":"int" },
+			{ "number":4, "name":"cost_rep", "type":"int" },
+			{ "number":5, "name":"cost_del", "type":"int" }
+		],
+		"returnType":"int",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"abs",
+		"formats": [ "asb(mix)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"number", "type":"mix" }
+		],
+		"returnType":"number",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"bindec",
+		"formats": [ "bindec(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"binary_string", "type":"string", "isReturnValue":true }
+		],
+		"returnType":"number",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"decbin",
+		"formats": [ "decbin(int)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"number", "type":"int", "isReturnValue":true }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"hexdec",
+		"formats":[ "hexdec(string)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"hex_string", "type":"string", "isReturnValue":true }
+		],
+		"returnType":"number",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"max",
+		"formats": [ "max(array)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"values", "type":"array" }
+		],
+		"_comment":"The value is of the original type, and uses standard comparison rules in PHP, dunno if we need this!",
+		"returnType":"mix",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"max",
+		"formats": [ "max(mix)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"value1", "type":"mix" },
+			{ "number":2, "name":"value2", "type":"mix", "IsVariadic":true }
+		],
+		"returnType":"mix",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"min",
+		"formats": [ "min(array)" ],
+		"totalParameters":1,
+		"parameters": [
+			{ "number":1, "name":"values", "type":"array" }
+		],
+		"returnType":"mix",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"min",
+		"formats": [ "min(mix, mix)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"value1", "type":"mix" },
+			{ "number":2, "name":"value2", "type":"mix", "IsVariadic":true }
+		],
+		"returnType":"mix",
+		"defaultStatus":"None"
+	},
+	{
+		"name":"date",
+		"formats": [ "date(string, int)" ],
+		"totalParameters":2,
+		"parameters": [
+			{ "number":1, "name":"value1", "type":"string" },
+			{ "number":2, "name":"value2", "type":"int", "optional":true  }
+		],
+		"returnType":"string",
+		"defaultStatus":"None"
+	},
+    {
+        "name":"mysqli_num_rows",
+        "formats":[ "mysqli_num_rows(result)" ],
+        "totalParameters": 1,
+        "parameters": [
+            { "number":1, "name":"result", "type":"object" }
+        ],
+        "returnType":"string",
+        "defaultStatus": "None"
+    }
+]

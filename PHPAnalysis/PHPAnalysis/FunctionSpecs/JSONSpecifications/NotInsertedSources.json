@@ -1,0 +1,138 @@
+{
+	//This var is not fucking populated by default??? WTF IS THIS=?????
+	"name":"$HTTP_RAW_POST_DATA",
+	"type":"",
+	"formats": []		
+}
+{
+	"name":"$_GET",
+	"type":"array",
+	"SQLTaint":"SQL_ALL", //These are not required, if the string cannot be parsed into an Enum, then the default ALL tag is used
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "$_GET[int]", "$_GET[string]", "$_GET[float]", "$_GET[boolean]" ]
+},
+{
+	"name":"$_POST",
+	"type":"array",
+	"formats":[ "$_POST[int]", "$_POST[string]", "$_POST[float]", "$_POST[boolean]" ]
+},
+{
+	"name":"$_COOKIE",
+	"type":"array",
+	"formats": [ "$_COOKIE[int]", "$_COOKIE[string]", "_REQUEST[float]", "$_REQUEST[boolean]" ]
+},
+{
+	"name":"$_REQUEST",
+	"type":"array",
+	"formats": [ "$_REQUEST[int]", "$_REQUEST[string]", "$_REQUEST[float]", "$_REQUEST[boolean]" ]
+},
+{
+	"name":"$_FILES",
+	"type":"array",
+	"formats": [ "$_FILES[int]", "$_FILES[string]", "$_FILES[float]", "$_FILES[boolean]" ]
+},
+{
+	"name":"$_SERVER",
+	"type":"array",
+	"formats": [ "$_SERVER[int]", "$_SERVER[string]", "$_SERVER[float]", "$_SERVER[boolean]" ]
+},
+{
+	"name":"$_ENV",
+	"type":"array",
+	"formats": [ "$_ENV[int]", "$_ENV[string]", "$_ENV[float]", "$_ENV[boolean]" ]
+},
+{
+	"name":"$HTTP_GET_VARS",
+	"type":"array",
+	"formats": [ "$HTTP_GET_VARS[int]", "$HTTP_GET_VARS[string]", "$HTTP_GET_VARS[float]", "$HTTP_GET_VARS[boolean]" ]
+},
+{
+	"name":"$HTTP_POST_VARS",
+	"type":"array",
+	"formats": [ "$HTTP_POST_VARS[int]", "$HTTP_POST_VARS[string]", "$HTTP_POST_VARS[float]", "$HTTP_POST_VARS[boolean]" ]
+},
+{
+	"name":"$HTTP_COOKIE_VARS",
+	"type":"array",
+	"formats": [ "$HTTP_COOKIE_VARS[int]", "$HTTP_COOKIE_VARS[string]", "$HTTP_COOKIE_VARS[float]", "$HTTP_COOKIE_VARS[boolean]" ]
+},
+{
+	"name":"$HTTP_REQUEST_VARS",
+	"type":"array",
+	"formats": [ "$HTTP_REQUEST_VARS[int]", "$HTTP_REQUEST_VARS[string]", "$HTTP_REQUEST_VARS[float]", "$HTTP_REQUEST_VARS[boolean]" ]
+},
+{
+	"name":"$HTTP_POST_FILES",
+	"type":"array",
+	"formats": [ "$HTTP_POST_FILES[int]", "$HTTP_POST_FILES[string]", "$HTTP_POST_FILES[float]", "$HTTP_POST_FILES[boolean]" ]
+},
+{
+	"name":"$HTTP_SERVER_VARS",
+	"type":"array",
+	"formats": [ "$HTTP_SERVER_VARS[int]", "$HTTP_SERVER_VARS[string]", "$HTTP_SERVER_VARS[float]", "$HTTP_SERVER_VARS[boolean]" ]
+},
+{
+	"name":"$HTTP_ENV_VARS",
+	"type":"array",
+	"formats": [ "$HTTP_ENV_VARS[int]", "$HTTP_ENV_VARS[string]", "$HTTP_ENV_VARS[float]", "$HTTP_ENV_VARS[boolean]" ]
+},
+{
+	"name":"$argv",
+	"type":"array",
+	"formats": [ "$argv[int]" ]
+},
+
+
+{
+	"_comment":"the following is not real sources, but can introduce taint"
+}
+{
+	"name":"rawurldecode",
+	"type":"function",
+	"_comment":"Tags are not required. The ALL tag is default if no tag is specified.",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "rawurldecode(string)" ]
+},
+{
+	"name":"urldecode",
+	"type":"function",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "urldecode(string)" ]
+},
+{
+	"name":"base64_decode",
+	"type":"function",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "base64_decode(string)" ]
+},
+{
+	"name":"html_entity_decode",
+	"type":"function",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "html_entity_decode(string)" ]
+},
+{
+	"name":"str_rot13",
+	"type":"function",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "str_rot13(string)" ]
+},
+{
+	"name":"chr",
+	"type":"function",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "chr(int)" ]
+},
+{
+	"name":"stripslashes",
+	"type":"function",
+	"SQLTaint":"SQL_ALL",
+	"XSSTaint":"XSS_ALL",
+	"formats": [ "stripslashes(string)" ]
+}

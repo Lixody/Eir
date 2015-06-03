@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{04511BB1-4881-44F2-B07D-FD88CEDE53CB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PHPAnalysis</RootNamespace>
+    <AssemblyName>PHPAnalysis</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommandLine">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.0.34\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="QuickGraph">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Data">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Graphviz">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Serialization">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="YamlDotNet">
+      <HintPath>..\packages\YamlDotNet.3.6.0\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Analysis\AST\IncludeResolver.cs" />
+    <Compile Include="Analysis\AST\XmlAstInterpreter.cs" />
+    <Compile Include="Analysis\CFG\FunctionAndMethodAnalyzer.cs" />
+    <Compile Include="Analysis\CFG\FunctionSummary.cs" />
+    <Compile Include="Analysis\CFG\ReversePostOrderWorkList.cs" />
+    <Compile Include="Analysis\CFG\Taint\AnalysisStacks.cs" />
+    <Compile Include="Analysis\CFG\Taint\ExpressionInfo.cs" />
+    <Compile Include="Analysis\CFG\Taint\IBlockAnalyzer.cs" />
+    <Compile Include="Analysis\CFG\Taint\IBlockAnalyzerComponent.cs" />
+    <Compile Include="Analysis\CFG\Taint\StoredVulnInfo.cs" />
+    <Compile Include="Analysis\CompositeVulneribilityReporter.cs" />
+    <Compile Include="Analysis\ConsoleVulnerabilityReporter.cs" />
+    <Compile Include="Analysis\CFG\Taint\StringAnalysis.cs" />
+    <Compile Include="Analysis\IAnalysisStartingListener.cs" />
+    <Compile Include="Analysis\ITaintProvider.cs" />
+    <Compile Include="Analysis\PHPDefinitions\CondSanitizer.cs" />
+    <Compile Include="Analysis\CFG\Taint\ConditionTaintAnalyser.cs" />
+    <Compile Include="Analysis\CFG\Taint\IConstructRepository.cs" />
+    <Compile Include="Analysis\CFG\Taint\ISinkAnalyzer.cs" />
+    <Compile Include="Analysis\IVulnerabilityReporter.cs" />
+    <Compile Include="Analysis\CFG\Taint\SQLITaint.cs" />
+    <Compile Include="Analysis\CFG\Taint\TaintHandlerTaintSet.cs" />
+    <Compile Include="Analysis\CFG\Taint\TaintSets.cs" />
+    <Compile Include="Analysis\CFG\Taint\SQLITaintSet.cs" />
+    <Compile Include="Analysis\CFG\Taint\XSSTaint.cs" />
+    <Compile Include="Analysis\CFG\VariableInfoComposer.cs" />
+    <Compile Include="Analysis\CFG\Taint\TaintBlockAnalyzer.cs" />
+    <Compile Include="Analysis\CFG\VariableResolver.cs" />
+    <Compile Include="Analysis\IVulnerabilityStorage.cs" />
+    <Compile Include="Analysis\ReportingVulnerabilityStorage.cs" />
+    <Compile Include="Components\ComponentContainer.cs" />
+    <Compile Include="Components\ComponentImporter.cs" />
+    <Compile Include="Configuration\FuncSpecConfiguration.cs" />
+    <Compile Include="Data\StackSet.cs" />
+    <Compile Include="Utils\ImmutableDictionaryComparer.cs" />
+    <Compile Include="Utils\Exceptions\ConfigurationParseException.cs" />
+    <Compile Include="Configuration\ComponentConfiguration.cs" />
+    <Compile Include="Data\AnalysisScope.cs" />
+    <Compile Include="Utils\Extensions\ScopeEnumExtensions.cs" />
+    <Compile Include="Data\VariableScope.cs" />
+    <Compile Include="Data\VariableTreeDimension.cs" />
+    <Compile Include="Data\PHP\Property.cs" />
+    <Compile Include="Data\QueueSet.cs" />
+    <Compile Include="Analysis\CFG\Taint\TaintAnalysis.cs" />
+    <Compile Include="Analysis\CFG\Taint\XSSTaintSet.cs" />
+    <Compile Include="Analysis\CFG\Taint\CFGTaintInfo.cs" />
+    <Compile Include="Data\PHP\Closure.cs" />
+    <Compile Include="Data\PHP\Interface.cs" />
+    <Compile Include="Data\PHP\ClosureUse.cs" />
+    <Compile Include="Data\PHP\Parameter.cs" />
+    <Compile Include="Data\VariabelStorage.cs" />
+    <Compile Include="Data\VariableTaint.cs" />
+    <Compile Include="Analysis\DefaultTaintProvider.cs" />
+    <Compile Include="IO\Cmd\AnimationIndicator.cs" />
+    <Compile Include="IO\Cmd\BarIndicator.cs" />
+    <Compile Include="IO\Cmd\BatsFlyingAnimation.cs" />
+    <Compile Include="IO\Cmd\BikeGuyRidingAnimation.cs" />
+    <Compile Include="IO\Cmd\ExecutiveDeskToyAnimation.cs" />
+    <Compile Include="Parsing\AstTraversing\ASTPrinter.cs" />
+    <Compile Include="Analysis\CFG\CFGPruner.cs" />
+    <Compile Include="Analysis\CFG\PrioritizedCompositeAnalysis.cs" />
+    <Compile Include="Analysis\CFG\Traversal\BackwardTraversal.cs" />
+    <Compile Include="Analysis\CFG\CFGASTNodeVisitor.cs" />
+    <Compile Include="Analysis\CFG\Traversal\ForwardTraversal.cs" />
+    <Compile Include="Analysis\CFG\Traversal\ITraversalTechnique.cs" />
+    <Compile Include="Analysis\CFG\Traversal\IWorklist.cs" />
+    <Compile Include="Analysis\CFG\Traversal\CFGTraverser.cs" />
+    <Compile Include="Analysis\CFG\ICFGAnalysis.cs" />
+    <Compile Include="Analysis\CFG\QueueWorklist.cs" />
+    <Compile Include="Analysis\CFG\ReachingDefinitionAnalysis.cs" />
+    <Compile Include="Analysis\AST\MetricVisitor.cs" />
+    <Compile Include="Parsing\CFGCreator.cs" />
+    <Compile Include="Data\ValueInfo.cs" />
+    <Compile Include="Data\Variable.cs" />
+    <Compile Include="IO\Cmd\ProgressIndicatorFactory.cs" />
+    <Compile Include="IO\Cmd\ProgressIndicator.cs" />
+    <Compile Include="TODOList.cs" />
+    <Compile Include="Utils\IMergeable.cs" />
+    <Compile Include="Utils\Extensions\IImmutableExtentions.cs" />
+    <Compile Include="Utils\QueueUtils.cs" />
+    <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\PHPConfiguration.cs" />
+    <Compile Include="Data\CFG\AbstractScope.cs" />
+    <Compile Include="Data\AstConstants.cs" />
+    <Compile Include="Data\CFG\CFGBlock.cs" />
+    <Compile Include="Data\CFG\ScopeHandler.cs" />
+    <Compile Include="Data\CFG\EdgeTag.cs" />
+    <Compile Include="Data\CFG\LoopScope.cs" />
+    <Compile Include="Data\CFG\SwitchScope.cs" />
+    <Compile Include="Data\PHP\Class.cs" />
+    <Compile Include="Data\File.cs" />
+    <Compile Include="Data\PHP\Function.cs" />
+    <Compile Include="Data\CFG\IfScope.cs" />
+    <Compile Include="Data\Project.cs" />
+    <Compile Include="Parsing\ParseResult.cs" />
+    <Compile Include="Parsing\AstTraversing\IXmlVisitor.cs" />
+    <Compile Include="Analysis\AST\ClassAndFunctionExtractor.cs" />
+    <Compile Include="Parsing\AstTraversing\IXmlTraverser.cs" />
+    <Compile Include="Parsing\AstTraversing\XmlTraverseEventArgs.cs" />
+    <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Utils\Extensions\EventExtensions.cs" />
+    <Compile Include="Parsing\FileParser.cs" />
+    <Compile Include="Parsing\ProjectParser.cs" />
+    <Compile Include="Arguments.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\GraphvizHelpers.cs" />
+    <Compile Include="Utils\IDeepCloneable.cs" />
+    <Compile Include="Utils\Extensions\CollectionExtensions.cs" />
+    <Compile Include="Utils\Preconditions.cs" />
+    <Compile Include="Parsing\XmlHelper.cs" />
+    <Compile Include="Parsing\AstTraversing\XmlTraverser.cs" />
+    <Compile Include="Utils\Extensions\VariableStorageExtensions.cs" />
+    <Compile Include="Utils\XmlHelpers\AstNode.cs" />
+    <Compile Include="Utils\XmlHelpers\AstNodeInfo.cs" />
+    <Compile Include="Utils\XmlHelpers\BreakContinue.cs" />
+    <Compile Include="Utils\XmlHelpers\Conditional.cs" />
+    <Compile Include="Utils\XmlHelpers\ExprVarNode.cs" />
+    <Compile Include="Utils\XmlHelpers\For.cs" />
+    <Compile Include="Utils\XmlHelpers\Case.cs" />
+    <Compile Include="Utils\XmlHelpers\GlobalNode.cs" />
+    <Compile Include="Utils\XmlHelpers\ScalarNode.cs" />
+    <Compile Include="Utils\XmlHelpers\XmlNodeExtensions.cs" />
+    <Compile Include="Configuration\GraphConfiguration.cs" />
+    <Compile Include="Analysis\PHPDefinitions\XSSSanitizer.cs" />
+    <Compile Include="Analysis\PHPDefinitions\XSSSink.cs" />
+    <Compile Include="Analysis\PHPDefinitions\Source.cs" />
+    <Compile Include="Analysis\PHPDefinitions\SQLSink.cs" />
+    <Compile Include="Analysis\PHPDefinitions\SQLSanitizer.cs" />
+    <Compile Include="Provider\Keys.cs" />
+    <Compile Include="Analysis\PHPDefinitions\FunctionsHandler.cs" />
+    <Compile Include="Data\CustomParameters.cs" />
+    <Compile Include="Analysis\AST\FunctionCallExtractor.cs" />
+    <Compile Include="Data\PHP\FunctionCall.cs" />
+    <Compile Include="Analysis\CFG\Taint\MixedTaint.cs" />
+    <Compile Include="Analysis\AST\CustomFunctionHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="config.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="config-template.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup />
+  <ItemGroup />
+</Project>
