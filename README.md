@@ -1,4 +1,4 @@
-#Unnamed #
+#Eir #
 PHP vulnerability scanner written in C#.  Why C#? Because! That's why!
 
 ### Requirements ###
