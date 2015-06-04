@@ -37,15 +37,14 @@ namespace PHPAnalysis
 
         static void Main(string[] args)
         {
+            Arguments arguments = ParseArguments(args);
+
             Configuration = GetConfiguration();
             Config configuration = Configuration;
             FunctionsHandler.Instance.FunctionSpecification = configuration.FuncSpecSettings;
             FunctionsHandler.Instance.LoadJsonSpecifications();
 
             _components = ImportExternalComponents(configuration.ComponentSettings);
-
-            Arguments arguments = ParseArguments(args);
-
             Analyze(arguments, configuration);
         }
 
