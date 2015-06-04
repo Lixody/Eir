@@ -130,6 +130,17 @@
 			"returnType":"string",
 			"defaultStatus":"None"
 		},
+		{
+			"name":"wp_filter_nohtml_kses",
+			"formats": [ "wp_filter_nohtml_kses(string)" ],
+			"aliases": [ "wp_filter_kses", "wp_filter_post_kses", "wp_kses_post" ],
+			"totalParameters":1,
+			"parameters": [
+				{ "number":1, "name":"data", "type":"string", "isReturnValue":true }
+			],
+			"returnType":"string",
+			"defaultStatus":"None"
+		},
 	    {
 			"name":"checked",
 			"formats": [ "checked(string, bool, bool)" ],
