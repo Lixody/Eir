@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using FileWriter.Plugin;
 using PHPAnalysis.Analysis;
 using PHPAnalysis.Analysis.PHPDefinitions;
 
@@ -14,8 +16,10 @@ namespace WordPress.Plugin
     {
         private readonly string _vulnerabilityFile;
         private int vulnCounter = 1;
+        private readonly DbFileWriter dbFileWriter;
         public FileVulnerabilityReporter()
         {
+            dbFileWriter = new DbFileWriter();
             this._vulnerabilityFile = "scan-report.txt";
         }
         public void AnalysisStarting(object o, AnalysisStartingEventArgs e)
@@ -27,6 +31,7 @@ namespace WordPress.Plugin
             WriteInfoLine("Target                  : " + e.Arguments.Target);
             WriteInfoLine("Scanning all subroutines: " + (e.Arguments.ScanAllSubroutines ? "Yes" : "No"));
             WriteInfoLine("---------------------------------------------------------");
+            dbFileWriter.WriteStart(e.Arguments.Target);
         }
 
         public void AnalysisEnding(object o, AnalysisEndedEventArgs e)
@@ -34,6 +39,7 @@ namespace WordPress.Plugin
             WriteInfoLine("---------------------------------------------------------");
             WriteInfoLine("Time spent: " + e.TimeElapsed);
             WriteInfoLine("---------------------------------------------------------");
+            dbFileWriter.WriteEnd(e.TimeElapsed);
         }
 
         public void ReportVulnerability(IVulnerabilityInfo vulnerabilityInfo)
@@ -44,6 +50,7 @@ namespace WordPress.Plugin
             WriteInfo("Call stack: " + String.Join(" → ", vulnerabilityInfo.CallStack.Select(c => c.Name)));
             WriteFilePath(vulnerabilityInfo);
             WriteEndVulnerability();
+            dbFileWriter.WriteVulnerability(vulnerabilityInfo);
         }
 
         public void ReportStoredVulnerability(IVulnerabilityInfo[] vulnerabilityPathInfos)
@@ -60,6 +67,7 @@ namespace WordPress.Plugin
             }
 
             WriteEndVulnerability();
+            dbFileWriter.WriteStoredVulnerability(vulnerabilityPathInfos);
         }
 
         private void WriteBeginVulnerability()
