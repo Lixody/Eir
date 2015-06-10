@@ -369,6 +369,36 @@
 			],
 			"returnType":"string",
 			"defaultStatus": "None"
+		},
+		{
+			"name":"simplexml_load_file",
+			"formats":[ "simplexml_load_file(str, str, int, str, bool)" ],
+			"totalParameters": 5,
+			"parameters": [
+				{ "number":1, "name":"filename", "type":"string" },
+				{ "number":2, "name":"class_name", "type":"string" },
+				{ "number":3, "name":"options", "type":"int" },
+				{ "number":4, "name":"ns", "type":"string" },
+				{ "number":5, "name":"is_prefix", "type":"bool", "optional":true },
+			],
+			"returnType":"SimpleXMLElement",
+			"_comment":"Retrieving a file (with tainted path) might/might not allow XSS. It seems this provides more FPs than TPs, which is why it is specified as a sanitizer",
+			"defaultStatus": "None"
+		},
+		{
+			"name":"file_get_contents",
+			"formats":[ "file_get_contents(str, bool, resource, int, int)" ],
+			"totalParameters": 5,
+			"parameters": [
+				{ "number":1, "name":"filename", "type":"string" },
+				{ "number":2, "name":"use_include_path", "type":"bool" },
+				{ "number":3, "name":"context", "type":"resource" },
+				{ "number":4, "name":"offset", "type":"int", "optional":true },
+				{ "number":5, "name":"maxlen", "type":"int" },
+			],
+			"returnType":"string",
+			"_comment":"Retrieving a file (with tainted path) might/might not allow XSS. It seems this provides more FPs than TPs, which is why it is specified as a sanitizer",
+			"defaultStatus": "None"
 		}
 	]
 }

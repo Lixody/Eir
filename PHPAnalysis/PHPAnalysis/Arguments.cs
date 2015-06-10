@@ -13,8 +13,8 @@ namespace PHPAnalysis
             "If set, analysis will scan all subroutines (methods + functions), " + 
             "no matter if they are called or not.";
 
-        private const string SummaryHelpText = "If set, analysis will use build summaries of " +
-            "subroutines and use those if when seing a call to a subroutine. (Warning: This will " + 
+        private const string SummaryHelpText = "If set, analysis will generate summaries of " +
+            "subroutines and use those when seing a call to a subroutine. (Warning: This will " + 
             "decrease analysis precision)";
 
         private const string ConfigLocHelpText = "If set, the analysis will read the given config file " +
@@ -40,6 +40,7 @@ namespace PHPAnalysis
         public string GetUsage()
         {
             var helpText = HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+            helpText.Heading = new HeadingInfo("Eir", "0.0.1");
             helpText.Copyright = new CopyrightInfo(" ", 2015);
             helpText.AdditionalNewLineAfterOption = true;
             helpText.AddPreOptionsLine("---------------------");

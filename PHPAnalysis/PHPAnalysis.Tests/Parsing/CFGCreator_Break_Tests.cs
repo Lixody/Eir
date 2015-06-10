@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using PHPAnalysis.Analysis;
 using PHPAnalysis.Data.CFG;
 using PHPAnalysis.Parsing;
 using PHPAnalysis.Tests.TestUtils;
-using PHPAnalysis.Utils;
 
 namespace PHPAnalysis.Tests.Analysis
 {
@@ -145,7 +143,7 @@ namespace PHPAnalysis.Tests.Analysis
             }
         }
 
-        [TestCase(@"<?php if ($count == 0) { return false; break; };")] //IRL code example (mystat)! - No error because of return!
+        [TestCase(@"<?php if ($count == 0) { return false; break; }")] //IRL code example (mystat)! - No error because of return!
         public void CFGCreation_UnreachableBreak_ShouldNotFail(string phpCode)
         {
             var graph = ParseAndBuildCFG(phpCode).Graph;

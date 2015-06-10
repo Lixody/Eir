@@ -10,15 +10,15 @@ using PHPAnalysis.Utils.XmlHelpers;
 
 namespace PHPAnalysis.Analysis.AST
 {
-    // TODO: Func/Method extract: NoTaint values for parameters: Can be Arrays, NULL or any constant expression!
-    //       Note: NoTaint arguments have to be on the right side of any non-default arguments.
+    // TODO: Func/Method extract: Default values for parameters: Can be Arrays, NULL or any constant expression!
+    //       Note: Default arguments have to be on the right side of any non-default arguments.
     // TODO: Method extract: Visibility modifiers (public, private, ..). Default is public.
     // TODO: Class extract: Detect superclass/interfaces.
     // TODO: Possibly rename this class.. 
     //
     // Let's ignore Traits for now..
 
-    public class ClassAndFunctionExtractor : IXmlVisitor
+    public sealed class ClassAndFunctionExtractor : IXmlVisitor
     {
         private enum FunctionClosure { Function, Closure }
 
