@@ -72,7 +72,7 @@ namespace FileWriter.Plugin
             {
                 return "StoredSQLI";
             }
-            if (message.StartsWith("SQLI vulnerability found"))
+            if (message.StartsWith("SQL vulnerability found"))
             {
                 return "SQLI";
             }
