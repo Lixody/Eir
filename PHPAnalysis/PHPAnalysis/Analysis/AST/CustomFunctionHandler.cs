@@ -32,10 +32,13 @@ namespace PHPAnalysis.Analysis.AST
 
 
         private readonly Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileAnalyzer;
-        public CustomFunctionHandler(Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileAnalyzer)
+        private readonly FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory;
+        public CustomFunctionHandler(Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileAnalyzer,
+                                     FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory)
         {
             this.AnalysisExtensions = new List<IBlockAnalyzerComponent>();
             this.fileAnalyzer = fileAnalyzer;
+            this.subroutineAnalyzerFactory = subroutineAnalyzerFactory;
         }
         /// <summary>
         /// Analyses a custom function in for security issues, with the currenctly known taint for actual parameters.
@@ -77,7 +80,7 @@ namespace PHPAnalysis.Analysis.AST
                 initialTaint.LocalVariables.Add(paramFormal.Value.Name, @var);
             }
 
-            var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, resolver, AnalysisScope.Function, fileAnalyzer, stacks);
+            var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, resolver, AnalysisScope.Function, fileAnalyzer, stacks, subroutineAnalyzerFactory);
             blockAnalyzer.AnalysisExtensions.AddRange(AnalysisExtensions);
             var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.Function, resolver, stacks.IncludeStack);
             var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, ImmutableVariableStorage.CreateFromMutable(initialTaint));

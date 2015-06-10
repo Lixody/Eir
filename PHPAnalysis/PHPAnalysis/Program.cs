@@ -128,14 +128,15 @@ namespace PHPAnalysis
                 filesCollection.Add(file);
             }
 
+            var subroutineAnalyzerFactory = new FunctionAndMethodAnalyzerFactory { UseSummaries = arguments.UseFunctionSummaries };
             Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks,
                  ImmutableVariableStorage> fileTaintAnalyzer = null;
             fileTaintAnalyzer = (varStorage, inclResolver, scope, stacks) =>
             {
                 Preconditions.NotNull(varStorage, "varStorage");
                 Preconditions.NotNull(inclResolver, "inclResolver");
-
-                var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, inclResolver, scope, fileTaintAnalyzer, stacks);
+                
+                var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, inclResolver, scope, fileTaintAnalyzer, stacks, subroutineAnalyzerFactory);
                 blockAnalyzer.AnalysisExtensions.AddRange(_components.BlockAnalyzers);
                 var condAnalyser = new ConditionTaintAnalyser(scope, inclResolver, stacks.IncludeStack);
                 var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, varStorage);
@@ -162,7 +163,7 @@ namespace PHPAnalysis
             if (arguments.ScanAllSubroutines)
             {
                 Console.WriteLine("Scanning remaining subroutines..");
-                ScanUnscannedSubroutines(filesCollection, fileTaintAnalyzer, vulnerabilityStorage);
+                ScanUnscannedSubroutines(filesCollection, fileTaintAnalyzer, subroutineAnalyzerFactory, vulnerabilityStorage);
             }
 
             vulnerabilityStorage.CheckForStoredVulnerabilities();
@@ -194,7 +195,7 @@ namespace PHPAnalysis
             return defaultTaint;
         }
 
-        private static void ScanUnscannedSubroutines(List<File> filesCollection, Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileTaintAnalyzer, ReportingVulnerabilityStorage vulnerabilityStorage)
+        private static void ScanUnscannedSubroutines(List<File> filesCollection, Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileTaintAnalyzer, FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory, ReportingVulnerabilityStorage vulnerabilityStorage)
         {
             var defaultTaint = new DefaultTaintProvider().GetTaint();
 
@@ -203,7 +204,7 @@ namespace PHPAnalysis
                 var analysisStacks = new AnalysisStacks(file);
                 var analyser = new FunctionAndMethodAnalyzer(defaultTaint,
                     new IncludeResolver(filesCollection), analysisStacks,
-                    new CustomFunctionHandler(fileTaintAnalyzer), vulnerabilityStorage);
+                    new CustomFunctionHandler(fileTaintAnalyzer, subroutineAnalyzerFactory), vulnerabilityStorage);
 
                 foreach (var function in file.Functions.SelectMany(f => f.Value).Except(FunctionsHandler.Instance.ScannedFunctions))
                 {

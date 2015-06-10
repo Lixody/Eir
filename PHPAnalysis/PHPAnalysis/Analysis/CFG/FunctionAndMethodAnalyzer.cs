@@ -15,6 +15,8 @@ namespace PHPAnalysis.Analysis.CFG
 {
     public class FunctionAndMethodAnalyzer
     {
+        public bool UseSummaries { get; set; }
+
         private readonly ImmutableVariableStorage _varStorage;
         private readonly IIncludeResolver _incResolver;
         private readonly AnalysisStacks _stacks;
@@ -68,7 +70,7 @@ namespace PHPAnalysis.Analysis.CFG
             return exprInfo;
         }
 
-        private static HashSet<string> analyzedFunctions = new HashSet<string>(); 
+        private static readonly HashSet<string> AnalyzedFunctions = new HashSet<string>(); 
 
         /// <summary>
         /// Method to create a common taint set from a list of functions
@@ -82,7 +84,7 @@ namespace PHPAnalysis.Analysis.CFG
             var exprInfo = new ExpressionInfo();
             if (functionList.Any())
             {
-                analyzedFunctions.Add(functionList.First().Name);
+                AnalyzedFunctions.Add(functionList.First().Name);
                 foreach (var func in functionList)
                 {
                     var summary = MatchWithFunctionSummary(func, argInfos);
@@ -110,6 +112,11 @@ namespace PHPAnalysis.Analysis.CFG
 
         private void GenerateSummary(Function func, IList<ExpressionInfo> argInfos, ExpressionInfo result)
         {
+            if (!UseSummaries)
+            {
+                return;
+            }
+
             var summary = new FunctionSummary(func.Name);
             summary.ArgInfos.AddRange(argInfos);
             summary.ReturnValue = result;
