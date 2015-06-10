@@ -13,6 +13,7 @@ namespace FileWriter.Plugin
     public class DbFileWriter
     {
         private string vulnDBFile = "ScanResultForDB.txt";
+        private readonly string _stackSeperator = Environment.NewLine + " → ";
         public void WriteStart(string target)
         {
             WriteInfoLine(Environment.MachineName + ";" + Environment.UserName + ";");
@@ -31,8 +32,8 @@ namespace FileWriter.Plugin
             WriteInfo(vulnType + ";");
 
             WriteInfoLine("Message: " + vuln.Message);
-            WriteInfoLine("Include stack:" + String.Join(" → ", vuln.IncludeStack));
-            WriteInfo("Call stack: " + String.Join(" → ", vuln.CallStack.Select(c => c.Name)));
+            WriteInfoLine("Include stack:" + String.Join(_stackSeperator, vuln.IncludeStack));
+            WriteInfo("Call stack: " + String.Join(_stackSeperator, vuln.CallStack.Select(c => c.Name)));
             WriteFilePath(vuln);
             WriteInfo(";");
         }
@@ -51,8 +52,8 @@ namespace FileWriter.Plugin
                 }
                 
                 WriteInfoLine(pathInfo.Message);
-                WriteInfoLine(String.Join("->", pathInfo.IncludeStack));
-                WriteInfo("Callstack: " + String.Join(" → ", pathInfo.CallStack.Select(c => c.Name)));
+                WriteInfoLine(String.Join(_stackSeperator, pathInfo.IncludeStack));
+                WriteInfo("Callstack: " + String.Join(_stackSeperator, pathInfo.CallStack.Select(c => c.Name)));
                 WriteFilePath(pathInfo);
                 if (pair == 1)
                 {
