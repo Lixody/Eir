@@ -1,4 +1,6 @@
-﻿using CommandLine;
+﻿using System;
+using System.IO;
+using CommandLine;
 using CommandLine.Text;
 using PHPAnalysis.Annotations;
 
@@ -15,6 +17,10 @@ namespace PHPAnalysis
             "subroutines and use those when seing a call to a subroutine. (Warning: This will " + 
             "decrease analysis precision)";
 
+        private const string ConfigLocHelpText = "If set, the analysis will read the given config file " +
+            ", instead of defaulting to the one in the running folder. Use this if you encounter " +
+            "problems with finding the Config.yml file. Usage: Full path and filename to Config.yml file";
+
         [Option('t', "target", Required = true, HelpText = TargetHelpText)]
         public string Target { get; set; }
 
@@ -23,6 +29,9 @@ namespace PHPAnalysis
 
         [Option('s', "summaries", DefaultValue = false, HelpText = SummaryHelpText)]
         public bool UseFunctionSummaries { get; set; }
+
+        [Option('c', "configlocation", HelpText = ConfigLocHelpText)]
+        public string ConfigLocation { get; set; }
 
         [ParserState]
         public IParserState LastParserState { get; set; }

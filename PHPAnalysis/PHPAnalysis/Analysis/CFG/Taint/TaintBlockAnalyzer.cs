@@ -27,6 +27,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
         private readonly Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> _analyzer;
         private readonly AnalysisScope _analysisScope;
         private readonly AnalysisStacks _analysisStacks;
+        private readonly FunctionAndMethodAnalyzerFactory _subroutineAnalyzerFactory; 
 
         private TaintBlockAnalyzer()
         {
@@ -35,12 +36,13 @@ namespace PHPAnalysis.Analysis.CFG.Taint
 
         public TaintBlockAnalyzer(IVulnerabilityStorage vulnerabilityStorage, IIncludeResolver inclusionResolver, AnalysisScope scope,
             Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> analyzeTaint, 
-            AnalysisStacks stacks) : this()
+            AnalysisStacks stacks, FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory) : this()
         {
             Preconditions.NotNull(vulnerabilityStorage, "vulnerabilityStorage");
             Preconditions.NotNull(inclusionResolver, "inclusionResolver");
             Preconditions.NotNull(analyzeTaint, "analyzeTaint");
             Preconditions.NotNull(stacks, "stacks");
+            Preconditions.NotNull(subroutineAnalyzerFactory, "subroutineAnalyzerFactory");
 
             this._vulnerabilityStorage = vulnerabilityStorage;
             this._inclusionResolver = inclusionResolver;
@@ -48,6 +50,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             this._analysisScope = scope;
             this.ReturnInfos = new List<ExpressionInfo>();
             this._analysisStacks = stacks;
+            this._subroutineAnalyzerFactory = subroutineAnalyzerFactory;
         }
 
         public ImmutableVariableStorage Analyze(XmlNode node, ImmutableVariableStorage knownTaint)
@@ -98,11 +101,11 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             {
                 analysisExtension.FunctionMethodAnalyzerFactory = storage =>
                 {
-                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer);
+                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
                     customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
                     var varStorage = ImmutableVariableStorage.CreateFromMutable(storage);
-                    return new FunctionAndMethodAnalyzer(varStorage, _inclusionResolver, _analysisStacks,
-                                                        customFunctionHandler, _vulnerabilityStorage);
+                    return _subroutineAnalyzerFactory.Create(varStorage, _inclusionResolver, _analysisStacks,
+                                                             customFunctionHandler, _vulnerabilityStorage);
                 };
                 currentInfo = analysisExtension.Analyze(node, currentInfo, _variableStorage, _vulnerabilityStorage);
             }
@@ -120,11 +123,11 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             {
                 analysisExtension.FunctionMethodAnalyzerFactory = storage =>
                 {
-                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer);
+                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
                     customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
                     var varStorage = ImmutableVariableStorage.CreateFromMutable(storage);
-                    return new FunctionAndMethodAnalyzer(varStorage, _inclusionResolver, _analysisStacks,
-                                                        customFunctionHandler, _vulnerabilityStorage);
+                    return _subroutineAnalyzerFactory.Create(varStorage, _inclusionResolver, _analysisStacks,
+                                                             customFunctionHandler, _vulnerabilityStorage);
                 };
                 currentInfo = analysisExtension.AnalyzeFunctionCall(node, currentInfo, _variableStorage, _vulnerabilityStorage, argInfos, this._analysisStacks);
             }
@@ -920,10 +923,10 @@ namespace PHPAnalysis.Analysis.CFG.Taint
                 return argInfos.Aggregate(expr_info, (current, info) => current.Merge(info));
             }
             
-            var customFunctionHandler = new CustomFunctionHandler(this._analyzer);
+            var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
             customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
             var immutableVariableStorage = ImmutableVariableStorage.CreateFromMutable(_variableStorage);
-            var functionMethodAnalyzer = new FunctionAndMethodAnalyzer(immutableVariableStorage, _inclusionResolver, 
+            var functionMethodAnalyzer = this._subroutineAnalyzerFactory.Create(immutableVariableStorage, _inclusionResolver,
                 _analysisStacks, customFunctionHandler, _vulnerabilityStorage);
 
             var resultTaintSet = new ExpressionInfo();
@@ -1012,9 +1015,9 @@ namespace PHPAnalysis.Analysis.CFG.Taint
                 return argInfos.Aggregate(exprInfo, (current, info) => current.Merge(info));
             }
             
-            var customFunctionHandler = new CustomFunctionHandler(this._analyzer);
+            var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
             customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
-            var functionMethodAnalyzer = new FunctionAndMethodAnalyzer(ImmutableVariableStorage.CreateFromMutable(_variableStorage),
+            var functionMethodAnalyzer = _subroutineAnalyzerFactory.Create(ImmutableVariableStorage.CreateFromMutable(_variableStorage),
                 _inclusionResolver, _analysisStacks, customFunctionHandler, _vulnerabilityStorage);
 
             var methodCallTaintSet = new ExpressionInfo();

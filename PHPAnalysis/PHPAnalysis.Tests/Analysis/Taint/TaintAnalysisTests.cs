@@ -371,7 +371,7 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
                 Preconditions.NotNull(varStorage, "varStorage");
                 Preconditions.NotNull(inclResolver, "inclResolver");
                 var fileToAnalyze = stacks.IncludeStack.Peek();
-                var blockAnalyzer = new TaintBlockAnalyzer(vulnStorage.Object, inclResolver, scope, fileTaintAnalyzer, stacks);
+                var blockAnalyzer = new TaintBlockAnalyzer(vulnStorage.Object, inclResolver, scope, fileTaintAnalyzer, stacks, new FunctionAndMethodAnalyzerFactory());
                 var condAnalyser = new ConditionTaintAnalyser(scope, inclResolver, stacks.IncludeStack);
                 var cfgTaintAnalysis = new PHPAnalysis.Analysis.CFG.TaintAnalysis(blockAnalyzer, condAnalyser, varStorage);
                 var analyzer = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new ReversePostOrderWorkList(fileToAnalyze.CFG));
@@ -407,7 +407,7 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
             var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.File, incResolver, fileStack);
 
             var funcMock = new Mock<Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage>>();
-            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver, AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack));
+            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver, AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack), new FunctionAndMethodAnalyzerFactory());
             var immutableInitialTaint = new DefaultTaintProvider().GetTaint();
             var cfgTaintAnalysis = new PHPAnalysis.Analysis.CFG.TaintAnalysis(blockAnalyzer, condAnalyser, immutableInitialTaint);
             var taintAnalysis = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new ReversePostOrderWorkList(cfg));

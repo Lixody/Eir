@@ -114,7 +114,7 @@ namespace PHPAnalysis.Tests.Analysis
             var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.File, incResolver, fileStack);
 
             var funcMock = new Mock<Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage>>();
-            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver, AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack));
+            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver, AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack), new FunctionAndMethodAnalyzerFactory());
             var immutableInitialTaint = new DefaultTaintProvider().GetTaint();
             var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, immutableInitialTaint);
             var taintAnalysis = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new QueueWorklist());

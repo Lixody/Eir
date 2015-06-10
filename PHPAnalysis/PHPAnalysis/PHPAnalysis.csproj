@@ -87,6 +87,7 @@
     <Compile Include="Analysis\AST\IncludeResolver.cs" />
     <Compile Include="Analysis\AST\XmlAstInterpreter.cs" />
     <Compile Include="Analysis\CFG\FunctionAndMethodAnalyzer.cs" />
+    <Compile Include="Analysis\CFG\FunctionAndMethodAnalyzerFactory.cs" />
     <Compile Include="Analysis\CFG\FunctionSummary.cs" />
     <Compile Include="Analysis\CFG\ReversePostOrderWorkList.cs" />
     <Compile Include="Analysis\CFG\Taint\AnalysisStacks.cs" />

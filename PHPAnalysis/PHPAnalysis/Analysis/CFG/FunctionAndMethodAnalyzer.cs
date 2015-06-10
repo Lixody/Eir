@@ -15,6 +15,8 @@ namespace PHPAnalysis.Analysis.CFG
 {
     public class FunctionAndMethodAnalyzer
     {
+        public bool UseSummaries { get; set; }
+
         private readonly ImmutableVariableStorage _varStorage;
         private readonly IIncludeResolver _incResolver;
         private readonly AnalysisStacks _stacks;
@@ -68,7 +70,7 @@ namespace PHPAnalysis.Analysis.CFG
             return exprInfo;
         }
 
-        private static HashSet<string> analyzedFunctions = new HashSet<string>(); 
+        private static readonly HashSet<string> AnalyzedFunctions = new HashSet<string>(); 
 
         /// <summary>
         /// Method to create a common taint set from a list of functions
@@ -82,7 +84,7 @@ namespace PHPAnalysis.Analysis.CFG
             var exprInfo = new ExpressionInfo();
             if (functionList.Any())
             {
-                analyzedFunctions.Add(functionList.First().Name);
+                AnalyzedFunctions.Add(functionList.First().Name);
                 foreach (var func in functionList)
                 {
                     var summary = MatchWithFunctionSummary(func, argInfos);
@@ -110,6 +112,11 @@ namespace PHPAnalysis.Analysis.CFG
 
         private void GenerateSummary(Function func, IList<ExpressionInfo> argInfos, ExpressionInfo result)
         {
+            if (!UseSummaries)
+            {
+                return;
+            }
+
             var summary = new FunctionSummary(func.Name);
             summary.ArgInfos.AddRange(argInfos);
             summary.ReturnValue = result;
@@ -182,12 +189,21 @@ namespace PHPAnalysis.Analysis.CFG
             {
                 SQLITaintSet sqliTaintSet = new SQLITaintSet();
                 XSSTaintSet xssts = new XSSTaintSet();
-                var formalParam = xssSantizerFunc.Parameters.FirstOrDefault(x => x.Value.IsReturn == true);
+                var returnParameters = xssSantizerFunc.Parameters.Where(x => x.Value.IsReturn);
                 try
                 {
-                    var actualParam = argInfos.ElementAt((int)formalParam.Key.Item1 - 1);
-                    sqliTaintSet = actualParam.ExpressionTaint.SqliTaint.Aggregate(sqliTaintSet, (current, taint) => current.Merge(taint));
-                    xssts = actualParam.ExpressionTaint.XssTaint.Aggregate(xssts, (current, taint) => current.Merge(taint));
+                    ExpressionInfo returnParameter = new ExpressionInfo();
+                    foreach(var item in returnParameters)
+                    {
+                        var actualParam = argInfos.ElementAt((int)item.Key.Item1 -1);
+                        if(actualParam == null)
+                        {
+                            continue;
+                        }
+                        returnParameter = returnParameter.Merge(actualParam);
+                    }
+                    sqliTaintSet = returnParameter.ExpressionTaint.SqliTaint.Aggregate(sqliTaintSet, (current, taint) => current.Merge(taint));
+                    xssts = returnParameter.ExpressionTaint.XssTaint.Aggregate(xssts, (current, taint) => current.Merge(taint));
                 }
                 catch(NullReferenceException)
                 {
@@ -203,13 +219,21 @@ namespace PHPAnalysis.Analysis.CFG
             {
                 XSSTaintSet xssts = new XSSTaintSet();
                 SQLITaintSet sqlts = new SQLITaintSet();
-                var formalParam = sqlSantizerFunc.Parameters.FirstOrDefault(x => x.Value.IsReturn == true);
+                var returnParameters = sqlSantizerFunc.Parameters.Where(x => x.Value.IsReturn);
                 try
                 {
-                    var actualParam = argInfos.ElementAt((int)formalParam.Key.Item1 - 1);
-                    xssts = actualParam.ExpressionTaint.XssTaint.Aggregate(xssts, (current, taint) => current.Merge(taint));
-                    sqlts = actualParam.ExpressionTaint.SqliTaint.Aggregate(sqlts, (current, taint) => current.Merge(taint));
-
+                    ExpressionInfo returnParameter = new ExpressionInfo();
+                    foreach(var item in returnParameters)
+                    {
+                        var actualParam = argInfos.ElementAt((int)item.Key.Item1 - 1);
+                        if(actualParam == null)
+                        {
+                            continue;
+                        }
+                        returnParameter = returnParameter.Merge(actualParam);
+                    }
+                    xssts = returnParameter.ExpressionTaint.XssTaint.Aggregate(xssts, (current, taint) => current.Merge(taint));
+                    sqlts = returnParameter.ExpressionTaint.SqliTaint.Aggregate(sqlts, (current, taint) => current.Merge(taint));
                 }
                 catch(NullReferenceException)
                 {
