@@ -38,8 +38,7 @@ namespace PHPAnalysis
         static void Main(string[] args)
         {
             Arguments arguments = ParseArguments(args);
-
-            Configuration = GetConfiguration();
+            Configuration = GetConfiguration(arguments.ConfigLocation);
             Config configuration = Configuration;
             FunctionsHandler.Instance.FunctionSpecification = configuration.FuncSpecSettings;
             FunctionsHandler.Instance.LoadJsonSpecifications();
@@ -372,11 +371,15 @@ namespace PHPAnalysis
             writer.WriteLine();
         }
 
-        private static Config GetConfiguration()
+        private static Config GetConfiguration(string configLocation)
         {
             try
             {
-                return Config.ReadConfiguration("config.yml");
+                if (string.IsNullOrWhiteSpace(configLocation))
+                {
+                    return Config.ReadConfiguration("config.yml");
+                }
+                return Config.ReadConfiguration(configLocation);
             }
             catch (FileNotFoundException)
             {
