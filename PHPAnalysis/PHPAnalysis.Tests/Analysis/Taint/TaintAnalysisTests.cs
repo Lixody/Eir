@@ -100,8 +100,8 @@ namespace PHPAnalysis.Tests.Analysis.Taint
          TestCase(@"<?php $v = array('a' => $_GET['a']); echo $v['a'];", 1),
          TestCase(@"<?php $v = array(1 => $_GET['a']); echo $v[1]; echo $v['1'];", 2),
          TestCase(@"<?php $v = array(1.1 => $_GET['a']); echo $v[1];", 1),
-         TestCase(@"<?php $v = array(true => $_GET['a'] ); echo $v[1];", 1, Ignore = true, IgnoreReason = "Not currently supported"),
-         TestCase(@"<?php $v = array(false => $_GET['a']); echo $v[0];", 1, Ignore = true, IgnoreReason = "Not currently supported"),
+         //TestCase(@"<?php $v = array(true => $_GET['a'] ); echo $v[1];", 1, Ignore = true, IgnoreReason = "Not currently supported"),
+         //TestCase(@"<?php $v = array(false => $_GET['a']); echo $v[0];", 1, Ignore = true, IgnoreReason = "Not currently supported"),
          TestCase(@"<?php $v = array(false => $_GET['a']); echo $v[1];", 0),
          TestCase(@"<?php $v = array('1' => array('2' => $_GET['a'])); echo $v[1][2];", 1),
          TestCase(@"<?php $v[] = $_GET['a']; foreach($v as $k) echo $k;", 1)
