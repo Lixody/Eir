@@ -103,18 +103,23 @@ namespace PHPAnalysis.Tests.Analysis
 
         private void ParseAndAnalyze(string php, IVulnerabilityStorage storage)
         {
+            FunctionsHandler fh = new FunctionsHandler();
+            fh.FunctionSpecification = Config.FuncSpecSettings;
+            fh.LoadJsonSpecifications();
+            
             var extractedFuncs = PHPParseUtils.ParseAndIterate<ClassAndFunctionExtractor>(php, Config.PHPSettings.PHPParserPath).Functions;
-            FunctionsHandler.Instance.CustomFunctions.AddRange(extractedFuncs);
+            fh.CustomFunctions.AddRange(extractedFuncs);
 
             var cfg = PHPParseUtils.ParseAndIterate<CFGCreator>(php, Config.PHPSettings.PHPParserPath).Graph;
 
             var incResolver = new IncludeResolver(new List<File>());
             var fileStack = new Stack<File>();
             fileStack.Push(new File() { FullPath = @"C:\TestFile.txt" });
-            var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.File, incResolver, fileStack);
+            var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.File, incResolver, fileStack, fh);
 
             var funcMock = new Mock<Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage>>();
-            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver, AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack), new FunctionAndMethodAnalyzerFactory());
+            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver,
+                AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack), new FunctionAndMethodAnalyzerFactory(), fh);
             var immutableInitialTaint = new DefaultTaintProvider().GetTaint();
             var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, immutableInitialTaint);
             var taintAnalysis = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new QueueWorklist());

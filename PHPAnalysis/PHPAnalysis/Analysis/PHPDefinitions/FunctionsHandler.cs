@@ -18,13 +18,6 @@ namespace PHPAnalysis.Analysis.PHPDefinitions
     //        APIs should be easy to use, but hard to misuse.
     public sealed class FunctionsHandler
     {
-        private static FunctionsHandler _instance;
-
-        public static FunctionsHandler Instance
-        {
-            get { return _instance ?? (_instance = new FunctionsHandler()); }
-        }
-
         public List<Source> Sources { get; private set; }
         public List<SQLSanitizer> SQLSanitizers { get; private set; }
         public List<XSSSanitizer> XSSSanitizers { get; private set; }
@@ -44,7 +37,7 @@ namespace PHPAnalysis.Analysis.PHPDefinitions
         public FuncSpecConfiguration FunctionSpecification { get; set; }
 
         //Crazy big ctor loading JSON specifications
-        private FunctionsHandler()
+        public FunctionsHandler()
         {
             Sources = new List<Source>();
             SQLSanitizers = new List<SQLSanitizer>();

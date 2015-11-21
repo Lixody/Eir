@@ -12,9 +12,6 @@ namespace PHPAnalysis.Tests.Analysis
         public void FixtureSetUp()
         {
             Config = Config.ReadConfiguration(TestSettings.ConfigFile);
-            // ARGH!!!! 
-            FunctionsHandler.Instance.FunctionSpecification = Config.FuncSpecSettings;
-            FunctionsHandler.Instance.LoadJsonSpecifications();
         }
 
         [TestFixtureTearDown]
