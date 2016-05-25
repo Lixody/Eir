@@ -930,12 +930,14 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             var immutableVariableStorage = ImmutableVariableStorage.CreateFromMutable(_variableStorage);
             var functionMethodAnalyzer = this._subroutineAnalyzerFactory.Create(immutableVariableStorage, _inclusionResolver,
                 _analysisStacks, customFunctionHandler, _vulnerabilityStorage, _funcHandler);
-
+            
             var resultTaintSet = new ExpressionInfo();
             if (!isAlreadyInStack)
             {
                 resultTaintSet = functionMethodAnalyzer.AnalyzeFunctionCall(functionCall, argInfos);
             }
+
+            resultTaintSet.ValueInfo.Taints = resultTaintSet.ValueInfo.Taints.Merge(resultTaintSet.ExpressionTaint);
 
             var sqlSaniFunc = _funcHandler.FindSQLSanitizerByName(functionCall.Name);
             var sqlSinkFunc = _funcHandler.FindSQLSinkByName(functionCall.Name);
