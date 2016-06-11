@@ -14,6 +14,13 @@ namespace FileWriter.Plugin
     {
         private string vulnDBFile = "ScanResultForDB.txt";
         private readonly string _stackSeperator = Environment.NewLine + " → ";
+        private FunctionsHandler _funcHandler;
+
+        public void RegisterFunctionsHandler(FunctionsHandler functionsHandler)
+        {
+            _funcHandler = functionsHandler;
+        }
+
         public void WriteStart(string target)
         {
             WriteInfoLine(Environment.MachineName + ";" + Environment.UserName + ";");
@@ -91,24 +98,23 @@ namespace FileWriter.Plugin
 
         public void WriteFilePath(IVulnerabilityInfo vulnInfo)
         {
-            // TODO: Fix the filewriter functionhandler
-            //var funcList = vulnInfo.CallStack.Any() ? FunctionsHandler.Instance.LookupFunction(vulnInfo.CallStack.Peek().Name) : null;
-            //if (funcList == null || !funcList.Any())
-            //{
-            //    return;
-            //}
-            //if (funcList.Count == 1)
-            //{
-            //    var str = "Function/method: " + funcList.First().Name +
-            //              (string.IsNullOrWhiteSpace(funcList.First().File) ? "" : Environment.NewLine + "In file: " + funcList.First().File);
-            //    WriteInfo(str);
-            //}
-            //else
-            //{
-            //    WriteInfo("Function/method: " + funcList.First().Name + Environment.NewLine
-            //              + "File candidates: " + Environment.NewLine
-            //              + string.Join(Environment.NewLine, funcList.Select(x => x.File)));
-            //}
+            var funcList = vulnInfo.CallStack.Any() ? _funcHandler.LookupFunction(vulnInfo.CallStack.Peek().Name) : null;
+            if (funcList == null || !funcList.Any())
+            {
+                return;
+            }
+            if (funcList.Count == 1)
+            {
+                var str = "Function/method: " + funcList.First().Name +
+                          (string.IsNullOrWhiteSpace(funcList.First().File) ? "" : Environment.NewLine + "In file: " + funcList.First().File);
+                WriteInfo(str);
+            }
+            else
+            {
+                WriteInfo("Function/method: " + funcList.First().Name + Environment.NewLine
+                          + "File candidates: " + Environment.NewLine
+                          + string.Join(Environment.NewLine, funcList.Select(x => x.File)));
+            }
         }
 
         private void WriteInfo(string info)
