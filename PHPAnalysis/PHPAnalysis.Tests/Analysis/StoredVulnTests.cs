@@ -103,8 +103,7 @@ namespace PHPAnalysis.Tests.Analysis
 
         private void ParseAndAnalyze(string php, IVulnerabilityStorage storage)
         {
-            FunctionsHandler fh = new FunctionsHandler();
-            fh.FunctionSpecification = Config.FuncSpecSettings;
+            FunctionsHandler fh = new FunctionsHandler(Config.FuncSpecSettings);
             fh.LoadJsonSpecifications();
             
             var extractedFuncs = PHPParseUtils.ParseAndIterate<ClassAndFunctionExtractor>(php, Config.PHPSettings.PHPParserPath).Functions;

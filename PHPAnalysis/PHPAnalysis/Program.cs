@@ -41,8 +41,7 @@ namespace PHPAnalysis
             Arguments arguments = ParseArguments(args);
             Configuration = GetConfiguration(arguments.ConfigLocation);
             Config configuration = Configuration;
-            _funcHandler = new FunctionsHandler();
-            _funcHandler.FunctionSpecification = configuration.FuncSpecSettings;
+            _funcHandler = new FunctionsHandler(configuration.FuncSpecSettings);
             _funcHandler.LoadJsonSpecifications();
 
             _components = ImportExternalComponents(configuration.ComponentSettings);
