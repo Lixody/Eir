@@ -175,7 +175,9 @@ namespace PHPAnalysis.Analysis.AST
                 case AstConstants.Subnodes.Type:
                     if (inPropertyDeclarations && currentProperty == null)
                     {
-                        propertyModifiers = (AstConstants.VisibilityModifiers) Enum.Parse(typeof (AstConstants.VisibilityModifiers), node.InnerText);
+                        var visibilityModifiers = (AstConstants.VisibilityModifiers) Enum.Parse(typeof (AstConstants.VisibilityModifiers), node.InnerText);
+                        // No modifier in source code = 0, if no modifier is present the default visibility is public
+                        propertyModifiers = visibilityModifiers == 0 ? AstConstants.VisibilityModifiers.Public : visibilityModifiers;
                     }
                     break;
             }
