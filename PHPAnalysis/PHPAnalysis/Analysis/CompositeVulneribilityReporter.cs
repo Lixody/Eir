@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using PHPAnalysis.Analysis.PHPDefinitions;
 using PHPAnalysis.Utils;
 
 namespace PHPAnalysis.Analysis
@@ -7,7 +8,6 @@ namespace PHPAnalysis.Analysis
     internal sealed class CompositeVulneribilityReporter : IVulnerabilityReporter
     {
         private readonly ICollection<IVulnerabilityReporter> _reporters = new List<IVulnerabilityReporter>();
-
         public uint NumberOfReportedVulnerabilities { get; private set; }
 
         public CompositeVulneribilityReporter(params IVulnerabilityReporter[] reporters)
@@ -40,6 +40,14 @@ namespace PHPAnalysis.Analysis
             }
 
             NumberOfReportedVulnerabilities++;
+        }
+
+        public void RegisterFunctionsHandler(FunctionsHandler functionsHandler)
+        {
+            foreach (var vulnerabilityReporter in _reporters)
+            {
+                vulnerabilityReporter.RegisterFunctionsHandler(functionsHandler);
+            }
         }
     }
 }

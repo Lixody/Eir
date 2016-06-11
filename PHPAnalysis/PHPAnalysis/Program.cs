@@ -115,7 +115,7 @@ namespace PHPAnalysis
 
             var filesCollection = new List<File>();
             var runningVulnReporter = new CompositeVulneribilityReporter(_components.VulnerabilityReporters);
-            var vulnerabilityStorage = new ReportingVulnerabilityStorage(runningVulnReporter);
+            var vulnerabilityStorage = new ReportingVulnerabilityStorage(runningVulnReporter, _funcHandler);
 
             var progrssIndicator = ProgressIndicatorFactory.CreateProgressIndicator(parseResult.ParsedFiles.Count());
             foreach (var parsedFile in parseResult.ParsedFiles)

@@ -279,11 +279,11 @@ $x = $_GET['a'];
 $y = 2;
 echo $y . $x;";
 
-            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object, 
+                                                                new FunctionsHandler());
 
             ParseAndAnalyze(phpCode, vulnStorage);
 
-            // Kenneth this is not supposed to happen? :P The message says var y, but should be var x.
             Assert.IsTrue(vulnStorage.Vulnerabilities.First().Message.Contains("variable: x "));
         }
 
@@ -309,7 +309,8 @@ echo $test;
 
 $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
 ?>";
-            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object,
+                                                                new FunctionsHandler());
             ParseAndAnalyze(phpcode, vulnStorage);
             Assert.AreEqual(2, vulnStorage.DetectedVulns.Count);
             Assert.NotNull(vulnStorage.Vulnerabilities.First(x => x.Message.ToUpper().Contains("SQL")));
@@ -320,7 +321,8 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
         public void UnknownFunctionTest_ShouldCreateOneError()
         {
             string phpCode = @"<?php echo hello($_GET['test']); ?>";
-            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object,
+                                                                new FunctionsHandler());
             ParseAndAnalyze(phpCode, vulnStorage);
             Assert.AreEqual(1, vulnStorage.DetectedVulns.Count);
             Assert.True(vulnStorage.Vulnerabilities.First().Message.ToUpper().Contains("XSS"));
@@ -330,7 +332,8 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
         public void UnknownFunctionTest_NoTaintedInput()
         {
             string phpCode = @"<?php echo hello('fisk'); ?>";
-            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object,
+                                                                new FunctionsHandler());
             ParseAndAnalyze(phpCode, vulnStorage);
             Assert.AreEqual(0, vulnStorage.Vulnerabilities.Count());
         }

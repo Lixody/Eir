@@ -33,7 +33,7 @@ namespace PHPAnalysis.Tests.Analysis
                                      $result = mysql_query('SELECT product_name FROM products');
                                      echo $result;";
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler());
 
             ParseAndAnalyze(phpCode, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -52,7 +52,7 @@ namespace PHPAnalysis.Tests.Analysis
         public void Stored_SqlConcatenated(string php, int vulns)
         {
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler());
 
             ParseAndAnalyze(php, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -75,7 +75,7 @@ namespace PHPAnalysis.Tests.Analysis
         public void StoredVulns_SQLMethods(string phpCode, int vulns)
         {
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler());
             
             ParseAndAnalyze(phpCode, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -93,7 +93,7 @@ namespace PHPAnalysis.Tests.Analysis
         public void StoredVulns_TempSanitize(string phpCode, int vulns)
         {
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler());
 
             ParseAndAnalyze(phpCode, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
