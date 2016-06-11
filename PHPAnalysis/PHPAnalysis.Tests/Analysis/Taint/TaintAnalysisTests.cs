@@ -360,8 +360,7 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
 
         private void AssertNoOfVulnsInMultipleCodeFiles(Tuple<string, string>[] codeFiles, int numberOfVulns)
         {
-            FunctionsHandler fh = new FunctionsHandler();
-            fh.FunctionSpecification = Config.FuncSpecSettings;
+            FunctionsHandler fh = new FunctionsHandler(Config.FuncSpecSettings);
             fh.LoadJsonSpecifications();
             
             var vulnStorage = new Mock<IVulnerabilityStorage>();
@@ -404,8 +403,7 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
 
         private void ParseAndAnalyze(string php, IVulnerabilityStorage storage)
         {
-            FunctionsHandler fh = new FunctionsHandler();
-            fh.FunctionSpecification = Config.FuncSpecSettings;
+            FunctionsHandler fh = new FunctionsHandler(Config.FuncSpecSettings);
             fh.LoadJsonSpecifications();
             
             var extractedFuncs = PHPParseUtils.ParseAndIterate<ClassAndFunctionExtractor>(php, Config.PHPSettings.PHPParserPath).Functions;

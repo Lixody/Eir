@@ -8,13 +8,13 @@ namespace PHPAnalysis.Tests.Analysis
     {
         protected Config Config;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             Config = Config.ReadConfiguration(TestSettings.ConfigFile);
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTearDown()
         {
             Config = null;
