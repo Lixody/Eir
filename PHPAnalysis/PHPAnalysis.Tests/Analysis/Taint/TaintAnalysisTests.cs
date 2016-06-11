@@ -10,6 +10,7 @@ using PHPAnalysis.Analysis.CFG;
 using PHPAnalysis.Analysis.CFG.Taint;
 using PHPAnalysis.Analysis.CFG.Traversal;
 using PHPAnalysis.Analysis.PHPDefinitions;
+using PHPAnalysis.Configuration;
 using PHPAnalysis.Data;
 using PHPAnalysis.Data.CFG;
 using PHPAnalysis.Parsing;
@@ -280,7 +281,7 @@ $y = 2;
 echo $y . $x;";
 
             var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object, 
-                                                                new FunctionsHandler());
+                                                                new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
 
             ParseAndAnalyze(phpCode, vulnStorage);
 
@@ -310,7 +311,7 @@ echo $test;
 $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
 ?>";
             var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object,
-                                                                new FunctionsHandler());
+                                                                new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
             ParseAndAnalyze(phpcode, vulnStorage);
             Assert.AreEqual(2, vulnStorage.DetectedVulns.Count);
             Assert.NotNull(vulnStorage.Vulnerabilities.First(x => x.Message.ToUpper().Contains("SQL")));
@@ -322,7 +323,7 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
         {
             string phpCode = @"<?php echo hello($_GET['test']); ?>";
             var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object,
-                                                                new FunctionsHandler());
+                                                                new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
             ParseAndAnalyze(phpCode, vulnStorage);
             Assert.AreEqual(1, vulnStorage.DetectedVulns.Count);
             Assert.True(vulnStorage.Vulnerabilities.First().Message.ToUpper().Contains("XSS"));
@@ -333,7 +334,7 @@ $sqlQuery = mysqli_query($db, ""SELECT * FROM someTable WHERE id="" . $test);
         {
             string phpCode = @"<?php echo hello('fisk'); ?>";
             var vulnStorage = new ReportingVulnerabilityStorage(new Mock<IVulnerabilityReporter>().Object,
-                                                                new FunctionsHandler());
+                                                                new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
             ParseAndAnalyze(phpCode, vulnStorage);
             Assert.AreEqual(0, vulnStorage.Vulnerabilities.Count());
         }
