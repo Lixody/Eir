@@ -31,16 +31,13 @@ namespace PHPAnalysis
 {
     static class Program
     {
-        //HACK: there must be a better way to handle this ! :O 
-        public static Config Configuration;
         private static ComponentContainer _components;
         private static FunctionsHandler _funcHandler;
 
         static void Main(string[] args)
         {
             Arguments arguments = ParseArguments(args);
-            Configuration = GetConfiguration(arguments.ConfigLocation);
-            Config configuration = Configuration;
+            Config configuration = GetConfiguration(arguments.ConfigLocation);
             _funcHandler = new FunctionsHandler(configuration.FuncSpecSettings);
             _funcHandler.LoadJsonSpecifications();
 
