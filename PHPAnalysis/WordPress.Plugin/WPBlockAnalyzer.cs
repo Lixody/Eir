@@ -94,11 +94,11 @@ namespace WordPress.Plugin
             foreach (var argument in functionCall.Arguments.Where(a => a.Value.LocalName == AstConstants.Nodes.Scalar_String))
             {
                 var stringValue = ScalarNode.GetStringValue(argument.Value);
-                var functions = FunctionsHandler.Instance.LookupFunction(stringValue);
+                var functionAnalyzer = FunctionMethodAnalyzerFactory(currentStorage);
+                var functions = functionAnalyzer.FunctionsHandler.LookupFunction(stringValue);
                 if (functions.Any())
                 {
                     //Console.WriteLine("FOUND " + functions.Count() + " functions with name: " + stringValue);
-                    var functionAnalyzer = this.FunctionMethodAnalyzerFactory(currentStorage);
                     var call = new FunctionCall(stringValue, null, AstNode.GetStartLine(node), AstNode.GetEndLine(node));
 
                     if (analysisStacks.CallStack.Any(c => c.Name == call.Name))

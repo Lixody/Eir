@@ -36,6 +36,8 @@ namespace PHPAnalysis.Analysis.CFG
             this._funcHandler = fh;
         }
 
+        public FunctionsHandler FunctionsHandler => _funcHandler;
+
         /// <summary>
         /// Method to analyze a PHP funciton call. 
         /// </summary>

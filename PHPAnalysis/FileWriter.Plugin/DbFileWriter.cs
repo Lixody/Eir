@@ -91,23 +91,24 @@ namespace FileWriter.Plugin
 
         public void WriteFilePath(IVulnerabilityInfo vulnInfo)
         {
-            var funcList = vulnInfo.CallStack.Any() ? FunctionsHandler.Instance.LookupFunction(vulnInfo.CallStack.Peek().Name) : null;
-            if (funcList == null || !funcList.Any())
-            {
-                return;
-            }
-            if (funcList.Count == 1)
-            {
-                var str = "Function/method: " + funcList.First().Name +
-                          (string.IsNullOrWhiteSpace(funcList.First().File) ? "" : Environment.NewLine + "In file: " + funcList.First().File);
-                WriteInfo(str);
-            }
-            else
-            {
-                WriteInfo("Function/method: " + funcList.First().Name + Environment.NewLine
-                          + "File candidates: " + Environment.NewLine
-                          + string.Join(Environment.NewLine, funcList.Select(x => x.File)));
-            }
+            // TODO: Fix the filewriter functionhandler
+            //var funcList = vulnInfo.CallStack.Any() ? FunctionsHandler.Instance.LookupFunction(vulnInfo.CallStack.Peek().Name) : null;
+            //if (funcList == null || !funcList.Any())
+            //{
+            //    return;
+            //}
+            //if (funcList.Count == 1)
+            //{
+            //    var str = "Function/method: " + funcList.First().Name +
+            //              (string.IsNullOrWhiteSpace(funcList.First().File) ? "" : Environment.NewLine + "In file: " + funcList.First().File);
+            //    WriteInfo(str);
+            //}
+            //else
+            //{
+            //    WriteInfo("Function/method: " + funcList.First().Name + Environment.NewLine
+            //              + "File candidates: " + Environment.NewLine
+            //              + string.Join(Environment.NewLine, funcList.Select(x => x.File)));
+            //}
         }
 
         private void WriteInfo(string info)
