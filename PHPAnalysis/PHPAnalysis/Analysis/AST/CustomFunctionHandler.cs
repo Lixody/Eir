@@ -33,12 +33,14 @@ namespace PHPAnalysis.Analysis.AST
 
         private readonly Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileAnalyzer;
         private readonly FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory;
+        private readonly FunctionsHandler _funcHandler;
         public CustomFunctionHandler(Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> fileAnalyzer,
-                                     FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory)
+                                     FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory, FunctionsHandler fh)
         {
             this.AnalysisExtensions = new List<IBlockAnalyzerComponent>();
             this.fileAnalyzer = fileAnalyzer;
             this.subroutineAnalyzerFactory = subroutineAnalyzerFactory;
+            this._funcHandler = fh;
         }
         /// <summary>
         /// Analyses a custom function in for security issues, with the currenctly known taint for actual parameters.
@@ -80,9 +82,9 @@ namespace PHPAnalysis.Analysis.AST
                 initialTaint.LocalVariables.Add(paramFormal.Value.Name, @var);
             }
 
-            var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, resolver, AnalysisScope.Function, fileAnalyzer, stacks, subroutineAnalyzerFactory);
+            var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, resolver, AnalysisScope.Function, fileAnalyzer, stacks, subroutineAnalyzerFactory, _funcHandler);
             blockAnalyzer.AnalysisExtensions.AddRange(AnalysisExtensions);
-            var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.Function, resolver, stacks.IncludeStack);
+            var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.Function, resolver, stacks.IncludeStack, _funcHandler);
             var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, ImmutableVariableStorage.CreateFromMutable(initialTaint));
             //var taintAnalysis = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new QueueWorklist());
             var taintAnalysis = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new ReversePostOrderWorkList(cfgcreator.Graph));

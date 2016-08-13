@@ -13,18 +13,8 @@ using YamlDotNet.Core.Tokens;
 
 namespace PHPAnalysis.Analysis.PHPDefinitions
 {
-    // TODO - This should not be a singleton! Currently our analysis is dependent on this singleton being filled
-    //        with functions, _before_ the analysis start. This is easy to forget and therefore an obvious place for mistakes (already happened once).
-    //        APIs should be easy to use, but hard to misuse.
     public sealed class FunctionsHandler
     {
-        private static FunctionsHandler _instance;
-
-        public static FunctionsHandler Instance
-        {
-            get { return _instance ?? (_instance = new FunctionsHandler()); }
-        }
-
         public List<Source> Sources { get; private set; }
         public List<SQLSanitizer> SQLSanitizers { get; private set; }
         public List<XSSSanitizer> XSSSanitizers { get; private set; }
@@ -41,10 +31,9 @@ namespace PHPAnalysis.Analysis.PHPDefinitions
         /// This will magically be set before first usage. If not, everything will crash and burn..
         /// </summary>
         /// <returns></returns>
-        public FuncSpecConfiguration FunctionSpecification { get; set; }
+        public FuncSpecConfiguration FunctionSpecification { get; private set; }
 
-        //Crazy big ctor loading JSON specifications
-        private FunctionsHandler()
+        public FunctionsHandler(FuncSpecConfiguration configuration)
         {
             Sources = new List<Source>();
             SQLSanitizers = new List<SQLSanitizer>();
@@ -56,6 +45,8 @@ namespace PHPAnalysis.Analysis.PHPDefinitions
             StoredProviders = new List<Function>();
             ScannedFunctions = new HashSet<Function>();
             FunctionSummaries = new Dictionary<Function, List<FunctionSummary>>();
+
+            FunctionSpecification = configuration;
         }
 
         public void LoadJsonSpecifications()
@@ -70,7 +61,7 @@ namespace PHPAnalysis.Analysis.PHPDefinitions
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    //TODO: Should we stop analysis here, or should we let the exception be thrown or somethign else?
+                    //TODO: Should we stop analysis here, or should we let the exception be thrown or something else?
                     Console.WriteLine("Could not find the given specification path! Stopping analysis");
                     Environment.Exit(100);
                 }

@@ -120,8 +120,9 @@ namespace PHPAnalysis.Tests.Analysis.CFG
         }
 
         [TestCase(@"<?php a::$b;", "b", AstConstants.Nodes.Expr_StaticPropertyFetch),
-        TestCase(@"<?php self::$d;", "d", AstConstants.Nodes.Expr_StaticPropertyFetch, Ignore = true, IgnoreReason = "Currently not supported, since we need class scope handling."),
-        TestCase(@"<?php parent::$d;", "d", AstConstants.Nodes.Expr_StaticPropertyFetch, Ignore = true, IgnoreReason = "Currently not supported, since we need class scope handling."),]
+        //TestCase(@"<?php self::$d;", "d", AstConstants.Nodes.Expr_StaticPropertyFetch, Ignore = true, IgnoreReason = "Currently not supported, since we need class scope handling."),
+        //TestCase(@"<?php parent::$d;", "d", AstConstants.Nodes.Expr_StaticPropertyFetch, Ignore = true, IgnoreReason = "Currently not supported, since we need class scope handling."),
+        ]
         public void ResolveStaticPropertyFetch(string phpCode, string expectedVarName, string nodeType)
         {
             XmlNode ast = PHPParseUtils.ParsePHPCode(phpCode, Config.PHPSettings.PHPParserPath).FirstChild.NextSibling;

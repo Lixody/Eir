@@ -22,17 +22,21 @@ namespace PHPAnalysis.Analysis.CFG
         private readonly AnalysisStacks _stacks;
         private readonly CustomFunctionHandler _customFunctionHandler;
         private readonly IVulnerabilityStorage _vulnerabilityStorage;
+        private readonly FunctionsHandler _funcHandler;
 
         public FunctionAndMethodAnalyzer(ImmutableVariableStorage variableStorage, IIncludeResolver incResolver,
             AnalysisStacks stacks, CustomFunctionHandler customFuncHandler,
-            IVulnerabilityStorage vulnerabilityStorage)
+            IVulnerabilityStorage vulnerabilityStorage, FunctionsHandler fh)
         {
             this._varStorage = variableStorage;
             this._incResolver = incResolver;
             this._stacks = stacks;
             this._customFunctionHandler = customFuncHandler;
             this._vulnerabilityStorage = vulnerabilityStorage;
+            this._funcHandler = fh;
         }
+
+        public FunctionsHandler FunctionsHandler => _funcHandler;
 
         /// <summary>
         /// Method to analyze a PHP funciton call. 
@@ -44,7 +48,7 @@ namespace PHPAnalysis.Analysis.CFG
         {
             //In most cases this should be either 0 or 1 but situations where functions are specified several places can happen.
             //Therefore, we support it and select the worst case.
-            List<Function> functionList = FunctionsHandler.Instance.LookupFunction(functionCall.Name);
+            List<Function> functionList = _funcHandler.LookupFunction(functionCall.Name);
             return CreateCommonTaintSets(functionList, argInfos);
         }
 
@@ -63,7 +67,7 @@ namespace PHPAnalysis.Analysis.CFG
             //Try to find all the possible method calls, and create the worst case scenario of taints.
             foreach (string className in methodCall.ClassNames)
             {
-                IList<Function> funclist = FunctionsHandler.Instance.LookupFunction(methodCall.CreateFullMethodName(className));
+                IList<Function> funclist = _funcHandler.LookupFunction(methodCall.CreateFullMethodName(className));
                 exprInfo = exprInfo.Merge(CreateCommonTaintSets(funclist, argInfos));
             }
 
@@ -122,20 +126,20 @@ namespace PHPAnalysis.Analysis.CFG
             summary.ReturnValue = result;
 
             List<FunctionSummary> existingSummaries;
-            if (FunctionsHandler.Instance.FunctionSummaries.TryGetValue(func, out existingSummaries))
+            if (_funcHandler.FunctionSummaries.TryGetValue(func, out existingSummaries))
             {
                 existingSummaries.Add(summary);
             }
             else
             {
-                FunctionsHandler.Instance.FunctionSummaries.Add(func, new List<FunctionSummary>() {summary});
+                _funcHandler.FunctionSummaries.Add(func, new List<FunctionSummary>() {summary});
             }
         }
 
         private FunctionSummary MatchWithFunctionSummary(Function func, IList<ExpressionInfo> argInfos)
         {
             List<FunctionSummary> summaries;
-            if (FunctionsHandler.Instance.FunctionSummaries.TryGetValue(func, out summaries))
+            if (_funcHandler.FunctionSummaries.TryGetValue(func, out summaries))
             {
                 var callArgInfo = argInfos.ToArray();
                 foreach (var functionSummary in summaries)
@@ -178,11 +182,11 @@ namespace PHPAnalysis.Analysis.CFG
 
             //We have to find customFunctions explicitly as it can always be casted to a Function, as it is the base class.
             //However if we introduce a custom function class then it can be castet to this type, and work like the rest.
-            Function customFunc = FunctionsHandler.Instance.FindCustomFunctionByName(func.Name);
+            Function customFunc = _funcHandler.FindCustomFunctionByName(func.Name);
 
             //If there exists a Source with the function name, then we select it.
             //But sources and be of several other types, like arrays etc.
-            Source sourceFunc = FunctionsHandler.Instance.FindSourceByName(func.Name);
+            Source sourceFunc = _funcHandler.FindSourceByName(func.Name);
 
             //TODO: This should be changed to be dependent on parameters!!! 
             if (xssSantizerFunc != null)
@@ -247,7 +251,7 @@ namespace PHPAnalysis.Analysis.CFG
             }
             if (customFunc != null)
             {
-                FunctionsHandler.Instance.ScannedFunctions.Add(customFunc);
+                _funcHandler.ScannedFunctions.Add(customFunc);
                 tmp = this._customFunctionHandler.AnalyseCustomFunction(customFunc, this._varStorage, _vulnerabilityStorage, argInfos, this._incResolver, this._stacks);
             }
             if (sourceFunc != null)

@@ -33,7 +33,7 @@ namespace PHPAnalysis.Tests.Analysis
                                      $result = mysql_query('SELECT product_name FROM products');
                                      echo $result;";
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
 
             ParseAndAnalyze(phpCode, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -52,7 +52,7 @@ namespace PHPAnalysis.Tests.Analysis
         public void Stored_SqlConcatenated(string php, int vulns)
         {
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
 
             ParseAndAnalyze(php, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -75,7 +75,7 @@ namespace PHPAnalysis.Tests.Analysis
         public void StoredVulns_SQLMethods(string phpCode, int vulns)
         {
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
             
             ParseAndAnalyze(phpCode, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -93,7 +93,7 @@ namespace PHPAnalysis.Tests.Analysis
         public void StoredVulns_TempSanitize(string phpCode, int vulns)
         {
             var reporter = new Mock<IVulnerabilityReporter>();
-            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object);
+            var vulnStorage = new ReportingVulnerabilityStorage(reporter.Object, new FunctionsHandler(new FuncSpecConfiguration(new List<string>(), new List<string>())));
 
             ParseAndAnalyze(phpCode, vulnStorage);
             vulnStorage.CheckForStoredVulnerabilities();
@@ -103,18 +103,22 @@ namespace PHPAnalysis.Tests.Analysis
 
         private void ParseAndAnalyze(string php, IVulnerabilityStorage storage)
         {
+            FunctionsHandler fh = new FunctionsHandler(Config.FuncSpecSettings);
+            fh.LoadJsonSpecifications();
+            
             var extractedFuncs = PHPParseUtils.ParseAndIterate<ClassAndFunctionExtractor>(php, Config.PHPSettings.PHPParserPath).Functions;
-            FunctionsHandler.Instance.CustomFunctions.AddRange(extractedFuncs);
+            fh.CustomFunctions.AddRange(extractedFuncs);
 
             var cfg = PHPParseUtils.ParseAndIterate<CFGCreator>(php, Config.PHPSettings.PHPParserPath).Graph;
 
             var incResolver = new IncludeResolver(new List<File>());
             var fileStack = new Stack<File>();
             fileStack.Push(new File() { FullPath = @"C:\TestFile.txt" });
-            var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.File, incResolver, fileStack);
+            var condAnalyser = new ConditionTaintAnalyser(AnalysisScope.File, incResolver, fileStack, fh);
 
             var funcMock = new Mock<Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage>>();
-            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver, AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack), new FunctionAndMethodAnalyzerFactory());
+            var blockAnalyzer = new TaintBlockAnalyzer(storage, incResolver,
+                AnalysisScope.File, funcMock.Object, new AnalysisStacks(fileStack), new FunctionAndMethodAnalyzerFactory(), fh);
             var immutableInitialTaint = new DefaultTaintProvider().GetTaint();
             var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, immutableInitialTaint);
             var taintAnalysis = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new QueueWorklist());

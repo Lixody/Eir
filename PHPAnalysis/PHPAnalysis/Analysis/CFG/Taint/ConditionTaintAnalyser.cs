@@ -22,12 +22,14 @@ namespace PHPAnalysis.Analysis.CFG.Taint
         private bool isNegated = false;
         private readonly AnalysisScope _analysisScope;
         private readonly Stack<File> _includeStack;
+        private readonly FunctionsHandler _funcHandler;
 
-        public ConditionTaintAnalyser(AnalysisScope scope, IIncludeResolver inclusionResolver, Stack<File> includeStack)
+        public ConditionTaintAnalyser(AnalysisScope scope, IIncludeResolver inclusionResolver, Stack<File> includeStack, FunctionsHandler fh)
         {
             this._analysisScope = scope;
             this.includeResolver = inclusionResolver;
             this._includeStack = includeStack;
+            this._funcHandler = fh;
         }
 
         public IImmutableDictionary<EdgeType, ImmutableVariableStorage> AnalyzeCond(XmlNode node, ImmutableVariableStorage knownTaint)
@@ -140,9 +142,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             var functionCallExtractor = new FunctionCallExtractor();
             var functionCall = functionCallExtractor.ExtractFunctionCall(node);
 
-            FunctionsHandler fh = FunctionsHandler.Instance;
-
-            var condSaniFunc = fh.FindCondSanitizerByName(functionCall.Name);
+            var condSaniFunc = _funcHandler.FindCondSanitizerByName(functionCall.Name);
             if (condSaniFunc != null)
             {
                 var parameter = functionCall.Arguments;

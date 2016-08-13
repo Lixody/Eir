@@ -27,7 +27,8 @@ namespace PHPAnalysis.Analysis.CFG.Taint
         private readonly Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> _analyzer;
         private readonly AnalysisScope _analysisScope;
         private readonly AnalysisStacks _analysisStacks;
-        private readonly FunctionAndMethodAnalyzerFactory _subroutineAnalyzerFactory; 
+        private readonly FunctionAndMethodAnalyzerFactory _subroutineAnalyzerFactory;
+        private readonly FunctionsHandler _funcHandler;
 
         private TaintBlockAnalyzer()
         {
@@ -36,7 +37,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
 
         public TaintBlockAnalyzer(IVulnerabilityStorage vulnerabilityStorage, IIncludeResolver inclusionResolver, AnalysisScope scope,
             Func<ImmutableVariableStorage, IIncludeResolver, AnalysisScope, AnalysisStacks, ImmutableVariableStorage> analyzeTaint, 
-            AnalysisStacks stacks, FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory) : this()
+            AnalysisStacks stacks, FunctionAndMethodAnalyzerFactory subroutineAnalyzerFactory, FunctionsHandler fh) : this()
         {
             Preconditions.NotNull(vulnerabilityStorage, "vulnerabilityStorage");
             Preconditions.NotNull(inclusionResolver, "inclusionResolver");
@@ -51,6 +52,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             this.ReturnInfos = new List<ExpressionInfo>();
             this._analysisStacks = stacks;
             this._subroutineAnalyzerFactory = subroutineAnalyzerFactory;
+            this._funcHandler = fh;
         }
 
         public ImmutableVariableStorage Analyze(XmlNode node, ImmutableVariableStorage knownTaint)
@@ -101,11 +103,11 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             {
                 analysisExtension.FunctionMethodAnalyzerFactory = storage =>
                 {
-                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
+                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory, _funcHandler);
                     customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
                     var varStorage = ImmutableVariableStorage.CreateFromMutable(storage);
                     return _subroutineAnalyzerFactory.Create(varStorage, _inclusionResolver, _analysisStacks,
-                                                             customFunctionHandler, _vulnerabilityStorage);
+                                                             customFunctionHandler, _vulnerabilityStorage, _funcHandler);
                 };
                 currentInfo = analysisExtension.Analyze(node, currentInfo, _variableStorage, _vulnerabilityStorage);
             }
@@ -123,11 +125,11 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             {
                 analysisExtension.FunctionMethodAnalyzerFactory = storage =>
                 {
-                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
+                    var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory, _funcHandler);
                     customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
                     var varStorage = ImmutableVariableStorage.CreateFromMutable(storage);
                     return _subroutineAnalyzerFactory.Create(varStorage, _inclusionResolver, _analysisStacks,
-                                                             customFunctionHandler, _vulnerabilityStorage);
+                                                             customFunctionHandler, _vulnerabilityStorage, _funcHandler);
                 };
                 currentInfo = analysisExtension.AnalyzeFunctionCall(node, currentInfo, _variableStorage, _vulnerabilityStorage, argInfos, this._analysisStacks);
             }
@@ -659,7 +661,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             var ifFalseNode = node.GetSubNode(AstConstants.Subnode + ":" + AstConstants.Subnodes.Else);
 
             Analyze(condNode);
-            var condAnalyzer = new ConditionTaintAnalyser(_analysisScope, this._inclusionResolver, _analysisStacks.IncludeStack);
+            var condAnalyzer = new ConditionTaintAnalyser(_analysisScope, this._inclusionResolver, _analysisStacks.IncludeStack, _funcHandler);
             
             var condResult = condAnalyzer.AnalyzeCond(condNode, ImmutableVariableStorage.CreateFromMutable(_variableStorage));
 
@@ -923,24 +925,24 @@ namespace PHPAnalysis.Analysis.CFG.Taint
                 return argInfos.Aggregate(expr_info, (current, info) => current.Merge(info));
             }
             
-            var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
+            var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory, _funcHandler);
             customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
             var immutableVariableStorage = ImmutableVariableStorage.CreateFromMutable(_variableStorage);
             var functionMethodAnalyzer = this._subroutineAnalyzerFactory.Create(immutableVariableStorage, _inclusionResolver,
-                _analysisStacks, customFunctionHandler, _vulnerabilityStorage);
+                _analysisStacks, customFunctionHandler, _vulnerabilityStorage, _funcHandler);
             
             var resultTaintSet = new ExpressionInfo();
             if (!isAlreadyInStack)
             {
                 resultTaintSet = functionMethodAnalyzer.AnalyzeFunctionCall(functionCall, argInfos);
             }
+
             resultTaintSet.ValueInfo.Taints = resultTaintSet.ValueInfo.Taints.Merge(resultTaintSet.ExpressionTaint);
 
-            FunctionsHandler fh = FunctionsHandler.Instance;
-            var sqlSaniFunc = fh.FindSQLSanitizerByName(functionCall.Name);
-            var sqlSinkFunc = fh.FindSQLSinkByName(functionCall.Name);
-            var xssSaniFunc = fh.FindXSSSanitizerByName(functionCall.Name);
-            var xssSinkFunc = fh.FindXSSSinkByName(functionCall.Name);
+            var sqlSaniFunc = _funcHandler.FindSQLSanitizerByName(functionCall.Name);
+            var sqlSinkFunc = _funcHandler.FindSQLSinkByName(functionCall.Name);
+            var xssSaniFunc = _funcHandler.FindXSSSanitizerByName(functionCall.Name);
+            var xssSinkFunc = _funcHandler.FindXSSSinkByName(functionCall.Name);
             
             if(sqlSaniFunc != null && sqlSaniFunc.DefaultStatus == SQLITaint.None)
             {
@@ -1016,10 +1018,10 @@ namespace PHPAnalysis.Analysis.CFG.Taint
                 return argInfos.Aggregate(exprInfo, (current, info) => current.Merge(info));
             }
             
-            var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory);
+            var customFunctionHandler = new CustomFunctionHandler(this._analyzer, _subroutineAnalyzerFactory, _funcHandler);
             customFunctionHandler.AnalysisExtensions.AddRange(this.AnalysisExtensions);
             var functionMethodAnalyzer = _subroutineAnalyzerFactory.Create(ImmutableVariableStorage.CreateFromMutable(_variableStorage),
-                _inclusionResolver, _analysisStacks, customFunctionHandler, _vulnerabilityStorage);
+                _inclusionResolver, _analysisStacks, customFunctionHandler, _vulnerabilityStorage, _funcHandler);
 
             var methodCallTaintSet = new ExpressionInfo();
             if(!isAlreadyInStack)
@@ -1027,15 +1029,14 @@ namespace PHPAnalysis.Analysis.CFG.Taint
                 methodCallTaintSet = functionMethodAnalyzer.AnalyzeMethodCall(methodCall, argInfos);
             }
 
-            FunctionsHandler fh = FunctionsHandler.Instance;
             var resultTaintSet = new ExpressionInfo();
             foreach (var className in methodCall.ClassNames.Distinct())
             {
                 var tempResultTaintSet = methodCallTaintSet.AssignmentClone();
-                var sqlSaniFunc = fh.FindSQLSanitizerByName(methodCall.CreateFullMethodName(className));
-                var sqlSinkFunc = fh.FindSQLSinkByName(methodCall.CreateFullMethodName(className));
-                var xssSaniFunc = fh.FindXSSSanitizerByName(methodCall.CreateFullMethodName(className));
-                var xssSinkFunc = fh.FindXSSSinkByName(methodCall.CreateFullMethodName(className));
+                var sqlSaniFunc = _funcHandler.FindSQLSanitizerByName(methodCall.CreateFullMethodName(className));
+                var sqlSinkFunc = _funcHandler.FindSQLSinkByName(methodCall.CreateFullMethodName(className));
+                var xssSaniFunc = _funcHandler.FindXSSSanitizerByName(methodCall.CreateFullMethodName(className));
+                var xssSinkFunc = _funcHandler.FindXSSSinkByName(methodCall.CreateFullMethodName(className));
 
                 if (sqlSaniFunc != null && sqlSaniFunc.DefaultStatus == SQLITaint.None)
                 {
@@ -1083,7 +1084,7 @@ namespace PHPAnalysis.Analysis.CFG.Taint
                 resultTaintSet = resultTaintSet.Merge(tempResultTaintSet);
 
                 var methodNameWithClass = methodCall.CreateFullMethodName(className);
-                bool isStoredProvider = FunctionsHandler.Instance.FindStoredProviderMethods(methodNameWithClass).Any();
+                bool isStoredProvider = _funcHandler.FindStoredProviderMethods(methodNameWithClass).Any();
                 if (isStoredProvider)
                 {
                     resultTaintSet.ExpressionStoredTaint = resultTaintSet.ExpressionStoredTaint.Merge(methodCall.Var.Info.PossibleStoredTaint);
@@ -1102,11 +1103,10 @@ namespace PHPAnalysis.Analysis.CFG.Taint
         {
             var functionCallExtractor = new FunctionCallExtractor();
             var methodCall = functionCallExtractor.ExtractMethodCall(node, this._variableStorage, this._analysisScope);
-            var fh = FunctionsHandler.Instance;
 
             foreach (var className in methodCall.ClassNames.Distinct())
             {
-                var sqlSinkFunc = fh.FindSQLSinkByName(methodCall.CreateFullMethodName(className));
+                var sqlSinkFunc = _funcHandler.FindSQLSinkByName(methodCall.CreateFullMethodName(className));
                 if (sqlSinkFunc == null)
                 {
                     continue;
@@ -1152,9 +1152,8 @@ namespace PHPAnalysis.Analysis.CFG.Taint
             var resultExpr = new ExpressionInfo();
             var functionCallExtractor = new FunctionCallExtractor();
             var functionCall = functionCallExtractor.ExtractFunctionCall(node);
-            var fh = FunctionsHandler.Instance;
 
-            var sqlSinkFunc = fh.FindSQLSinkByName(functionCall.Name);
+            var sqlSinkFunc = _funcHandler.FindSQLSinkByName(functionCall.Name);
 
             if (sqlSinkFunc != null)
             {

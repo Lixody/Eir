@@ -31,17 +31,15 @@ namespace PHPAnalysis
 {
     static class Program
     {
-        //HACK: there must be a better way to handle this ! :O 
-        public static Config Configuration;
         private static ComponentContainer _components;
+        private static FunctionsHandler _funcHandler;
 
         static void Main(string[] args)
         {
             Arguments arguments = ParseArguments(args);
-            Configuration = GetConfiguration(arguments.ConfigLocation);
-            Config configuration = Configuration;
-            FunctionsHandler.Instance.FunctionSpecification = configuration.FuncSpecSettings;
-            FunctionsHandler.Instance.LoadJsonSpecifications();
+            Config configuration = GetConfiguration(arguments.ConfigLocation);
+            _funcHandler = new FunctionsHandler(configuration.FuncSpecSettings);
+            _funcHandler.LoadJsonSpecifications();
 
             _components = ImportExternalComponents(configuration.ComponentSettings);
             Analyze(arguments, configuration);
@@ -117,7 +115,7 @@ namespace PHPAnalysis
 
             var filesCollection = new List<File>();
             var runningVulnReporter = new CompositeVulneribilityReporter(_components.VulnerabilityReporters);
-            var vulnerabilityStorage = new ReportingVulnerabilityStorage(runningVulnReporter);
+            var vulnerabilityStorage = new ReportingVulnerabilityStorage(runningVulnReporter, _funcHandler);
 
             var progrssIndicator = ProgressIndicatorFactory.CreateProgressIndicator(parseResult.ParsedFiles.Count());
             foreach (var parsedFile in parseResult.ParsedFiles)
@@ -136,9 +134,9 @@ namespace PHPAnalysis
                 Preconditions.NotNull(varStorage, "varStorage");
                 Preconditions.NotNull(inclResolver, "inclResolver");
                 
-                var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, inclResolver, scope, fileTaintAnalyzer, stacks, subroutineAnalyzerFactory);
+                var blockAnalyzer = new TaintBlockAnalyzer(vulnerabilityStorage, inclResolver, scope, fileTaintAnalyzer, stacks, subroutineAnalyzerFactory, _funcHandler);
                 blockAnalyzer.AnalysisExtensions.AddRange(_components.BlockAnalyzers);
-                var condAnalyser = new ConditionTaintAnalyser(scope, inclResolver, stacks.IncludeStack);
+                var condAnalyser = new ConditionTaintAnalyser(scope, inclResolver, stacks.IncludeStack, _funcHandler);
                 var cfgTaintAnalysis = new TaintAnalysis(blockAnalyzer, condAnalyser, varStorage);
                 var fileToAnalyze = stacks.IncludeStack.Peek();
                 var analyzer = new CFGTraverser(new ForwardTraversal(), cfgTaintAnalysis, new ReversePostOrderWorkList(fileToAnalyze.CFG));
@@ -158,7 +156,7 @@ namespace PHPAnalysis
                 fileTaintAnalyzer(initialTaint, inclusionResolver, AnalysisScope.File, stacks);
             }
 
-            Console.WriteLine("Scanned {0}/{1} subroutines. ", FunctionsHandler.Instance.ScannedFunctions.Count, FunctionsHandler.Instance.CustomFunctions.Count);
+            Console.WriteLine("Scanned {0}/{1} subroutines. ", _funcHandler.ScannedFunctions.Count, _funcHandler.CustomFunctions.Count, _funcHandler);
 
             if (arguments.ScanAllSubroutines)
             {
@@ -204,9 +202,9 @@ namespace PHPAnalysis
                 var analysisStacks = new AnalysisStacks(file);
                 var analyser = new FunctionAndMethodAnalyzer(defaultTaint,
                     new IncludeResolver(filesCollection), analysisStacks,
-                    new CustomFunctionHandler(fileTaintAnalyzer, subroutineAnalyzerFactory), vulnerabilityStorage);
+                    new CustomFunctionHandler(fileTaintAnalyzer, subroutineAnalyzerFactory, _funcHandler), vulnerabilityStorage, _funcHandler);
 
-                foreach (var function in file.Functions.SelectMany(f => f.Value).Except(FunctionsHandler.Instance.ScannedFunctions))
+                foreach (var function in file.Functions.SelectMany(f => f.Value).Except(_funcHandler.ScannedFunctions))
                 {
                     var functionCall = new FunctionCall(function.Name, function.AstNode, 0, 0);
                     analysisStacks.CallStack.Push(functionCall);
@@ -215,7 +213,7 @@ namespace PHPAnalysis
                 }
                 foreach (var @class in file.Classes.SelectMany(c => c.Value))
                 {
-                    foreach (var method in @class.Methods.Except(FunctionsHandler.Instance.ScannedFunctions))
+                    foreach (var method in @class.Methods.Except(_funcHandler.ScannedFunctions))
                     {
                         var methodCall = new MethodCall(method.Name, new [] { @class.Name }, method.AstNode, 0, 0);
                         analysisStacks.CallStack.Push(methodCall);
@@ -250,7 +248,7 @@ namespace PHPAnalysis
                 closure.File = parsedFile.Key;
             }
 
-            FunctionsHandler.Instance.CustomFunctions.AddRange(extractor.Functions);
+            _funcHandler.CustomFunctions.AddRange(extractor.Functions);
 
             foreach (var @class in extractor.Classes)
             {
@@ -261,7 +259,7 @@ namespace PHPAnalysis
                     //-||-: and make a special list for them in the function handler, or is this okay?
                     method.Name = @class.Name + "->" + method.Name;
                     method.File = parsedFile.Key;
-                    FunctionsHandler.Instance.CustomFunctions.Add(method);
+                    _funcHandler.CustomFunctions.Add(method);
                 }
             }
 

@@ -14,6 +14,13 @@ namespace FileWriter.Plugin
     {
         private string vulnDBFile = "ScanResultForDB.txt";
         private readonly string _stackSeperator = Environment.NewLine + " → ";
+        private FunctionsHandler _funcHandler;
+
+        public void RegisterFunctionsHandler(FunctionsHandler functionsHandler)
+        {
+            _funcHandler = functionsHandler;
+        }
+
         public void WriteStart(string target)
         {
             WriteInfoLine(Environment.MachineName + ";" + Environment.UserName + ";");
@@ -91,7 +98,7 @@ namespace FileWriter.Plugin
 
         public void WriteFilePath(IVulnerabilityInfo vulnInfo)
         {
-            var funcList = vulnInfo.CallStack.Any() ? FunctionsHandler.Instance.LookupFunction(vulnInfo.CallStack.Peek().Name) : null;
+            var funcList = vulnInfo.CallStack.Any() ? _funcHandler.LookupFunction(vulnInfo.CallStack.Peek().Name) : null;
             if (funcList == null || !funcList.Any())
             {
                 return;
