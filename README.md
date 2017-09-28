@@ -36,7 +36,7 @@ PHP vulnerability scanner written in C#.  Why C#? Because! That's why!
 	`nuget restore`
 7. Build solution  
 	`msbuild ./PHPAnalysis.sln`
-8. Add _config.yml_ file with correct settings - See _config-template.yml_
+8. Update the _config.yml_ file with correct settings
 	- Remember to reference the _FileWriter_ and/or the _WordPress_ dll files if needed
 9. Run the analysis  
 	`mono PHPAnalysis.exe --all --target ./myPhpFile.php`
