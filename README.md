@@ -30,7 +30,8 @@ PHP vulnerability scanner written in C#.  Why C#? Because! That's why!
 5. Install NuGet  
     `sudo apt install nuget`
 6. Install PHPAnalysis-parser dependencies with Composer  
-	`composer install`  
+    `composer install`  
+    `composer update`  
 6. Restore NuGet packages for PHPAnalysis solution   
 	`nuget restore`
 7. Build solution  
