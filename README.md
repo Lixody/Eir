@@ -14,9 +14,36 @@ PHP vulnerability scanner written in C#.  Why C#? Because! That's why!
 3. Fix the config.yml 
 4. Run the application
 
+#### Getting it running on Ubuntu 16.04  
+
+1. Install PHP  
+	`sudo apt install php7.0-cli`
+2. Make sure you have the XML library  
+	`sudo apt install php-xml`
+3. Install Composer  
+	`sudo apt install composer`
+4. [Install Mono](http://www.mono-project.com/download/#download-lin)  
+    `sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF`  
+    `echo "deb http://download.mono-project.com/repo/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/mono-official.list`  
+    `sudo apt-get update`  
+    `sudo apt-get install mono-devel`
+5. Install NuGet  
+    `sudo apt install nuget`
+6. Install PHPAnalysis-parser dependencies with Composer  
+	`composer install`  
+6. Restore NuGet packages for PHPAnalysis solution   
+	`nuget restore`
+7. Build solution  
+	`msbuild ./PHPAnalysis.sln`
+8. Add _config.yml_ file with correct settings - See _config-template.yml_
+	- Remember to reference the _FileWriter_ and/or the _WordPress_ dll files if needed
+9. Run the analysis  
+	`mono PHPAnalysis.exe --all --target ./myPhpFile.php`
+    
+
 ### Errors
 
-A collection of possible errors you might experience while setting up/using this application and possible ways to mitigate them. 
+A list of possible errors you might experience while setting up/using this application and possible ways to mitigate them. 
 
 -----------------------
 #### "Parser error: Syntax error, unexpected EOF on line xx"
@@ -31,7 +58,7 @@ Make sure the configuration file (`config.yml`) is present and has the correct f
 Standard rules for Yaml files apply.
 
 Common error:  
-Using tabs instead of spaces. Indentation should be done using spaces, since Yaml does not accept tabs.
+Using tabs instead of spaces. Indentation should be done using spaces.
 
 -----------------------
 ### External dependencies
@@ -46,4 +73,3 @@ Using tabs instead of spaces. Indentation should be done using spaces, since Yam
  
 - [Moq](https://github.com/Moq/moq4) 4.2.1502
 - [NUnit](http://www.nunit.org/) 2.6.4
- 
