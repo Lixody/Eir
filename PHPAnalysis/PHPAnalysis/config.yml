@@ -1,0 +1,39 @@
+php-settings:
+    # Path to PHP executable
+    PHPPath : C:/PHP/php.exe
+
+    # PHP file extensions
+    PHPExts : 
+      - .php 
+      - .php3 
+      - .php4
+      - .php5 
+      - .phtml 
+      - .inc
+
+    # Path to PHP parse project (Main.php file)
+    PHPParsePath : 
+
+graph-settings:
+    # Path to the graphviz dot convert tool
+    GraphvizPath : C:\Graphviz-2.38\dot.exe
+
+    # Arguments to the graphviz
+    GraphvizArguments : -Tpng -O
+
+component-settings:
+    # Indicates whether external components should be used
+    IncludeComponents : True
+
+    # Path to external components. 
+    ComponentFolder : .\Components\
+
+func-spec-settings:
+    # Path array to function specifications
+    PHPSpecs:
+      - ???\JsonSpecifications
+      - ???\StoredSqlProviders
+
+    # Path to extensions specification, can be excluded if not needed
+    ExtensionSpecs:
+      - ???\WPSpecifications
