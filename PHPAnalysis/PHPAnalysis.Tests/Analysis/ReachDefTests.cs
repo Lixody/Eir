@@ -13,7 +13,7 @@ namespace PHPAnalysis.Tests.Analysis
     [TestFixture]
     class ReachDefTests : ConfigDependentTests
     {
-        [Test]
+        [Test, Ignore("Not implemented")]
         public void IfElseVarDefTest()
         {
             const string php = @"<?php
