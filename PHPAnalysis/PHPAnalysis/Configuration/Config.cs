@@ -30,7 +30,8 @@ namespace PHPAnalysis.Configuration
         {
             Preconditions.NotNull(configPath, "configPath");
             var configInput = new StringReader(File.ReadAllText(configPath));
-            var deserializer = new Deserializer(ignoreUnmatched: true);
+            var deserializer = new DeserializerBuilder().IgnoreUnmatchedProperties().Build();
+
             try
             {
                 var config = deserializer.Deserialize<ConfigurationMutable>(configInput);

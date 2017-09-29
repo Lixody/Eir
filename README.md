@@ -65,12 +65,12 @@ Using tabs instead of spaces. Indentation should be done using spaces.
 ### External dependencies
 
 - [CommandLineParser](https://commandline.codeplex.com/) 1.9.71
-- [Newtonsoft.Json](https://www.newtonsoft.com/json) 6.0.0
+- [Newtonsoft.Json](https://www.newtonsoft.com/json) 10.0.0
 - [PHP-Parser](https://github.com/nikic/PHP-Parser) 1.1.0 
 - [QuickGraph](https://quickgraph.codeplex.com/) 3.6.61119.7
 - [Microsoft.Bcl.Immutable](https://www.nuget.org/packages/Microsoft.Bcl.Immutable) 1.0.34
-- [YamlDotNet](https://github.com/aaubry/YamlDotNet) 3.5.1  
+- [YamlDotNet](https://github.com/aaubry/YamlDotNet) 4.2.2  
  
  
-- [Moq](https://github.com/Moq/moq4) 4.2.1502
-- [NUnit](http://www.nunit.org/) 2.6.4
+- [Moq](https://github.com/Moq/moq4) 4.7.127
+- [NUnit](http://www.nunit.org/) 3.8.1
