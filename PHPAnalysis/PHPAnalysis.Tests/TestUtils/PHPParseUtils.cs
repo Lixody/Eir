@@ -9,10 +9,13 @@ namespace PHPAnalysis.Tests.TestUtils
         public static XmlNode ParsePHPCode(string phpCode, string phpParser)
         {
             var fileParser = new FileParser(phpParser);
-            string file = TestFileUtils.CreateTempFile(phpCode);
-            var xml = fileParser.ParsePHPFile(file);
-            TestFileUtils.ClearTempFiles();
-            return xml;
+
+            using (var fileManager = new TempFileManager())
+            {
+                string file = fileManager.WriteContent(phpCode);
+                var xml = fileParser.ParsePHPFile(file);
+                return xml;
+            }
         }
 
 

@@ -79,7 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestUtils\GraphAssertions.cs" />
     <Compile Include="TestUtils\PHPParseUtils.cs" />
-    <Compile Include="TestUtils\TestFileUtils.cs" />
+    <Compile Include="TestUtils\TempFileManager.cs" />
     <Compile Include="TestUtils\TypeExtensions.cs" />
     <Compile Include="Parsing\CFGCreator_FunctionCreation_tests.cs" />
     <Compile Include="Parsing\CFGCreator_ClassTests.cs" />
